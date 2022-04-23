@@ -1,0 +1,61 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --maroon: #771413;
+}
+
+html {
+  font-family: 'Inter', sans-serif;
+}
+
+/* FONT STYLE || SIZE AND FONT WEIGHT */
+.fs-64 {
+  font-size: 64px;
+}
+
+.fs-37 {
+  font-size: 37px;
+}
+
+.fs-24 {
+  font-size: 24px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.fc-white {
+  color: white;
+}
+
+/* BOOTSTRAP REMOVE OUTLINE */
+form .form-control:focus {
+  border-color: gray;
+  box-shadow: 0 0 gray;
+}
+
+.bg-maroon {
+  background-color: var(--maroon);
+}
+
+/* BUTTONS */
+.large-btn {
+  padding: 0.9rem 1.2rem;
+  width: 251px;
+  border-radius: 4px;
+}
+
+.navtoggler-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+

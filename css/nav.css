@@ -1,0 +1,31 @@
+.nav-div{
+    width: 300px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+    min-height: calc(100vh - 80px );
+}
+
+.nav-item{
+    padding: 2rem 2rem 2rem 75px;
+}
+
+.active{
+    background-color: rgba(196, 196, 196, .2);
+}
+
+@media screen and (max-width:1159px) {
+    .nav-div {
+        width: 100px;
+    }
+
+    .nav-div span{
+        display: none;
+    }
+
+    .nav-item{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        padding: 0;
+        height: 100px;
+    }
+}
