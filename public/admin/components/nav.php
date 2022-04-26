@@ -1,5 +1,4 @@
 <div class="nav-div">
-    
         <div class="nav-item active">
             <i class="fa-solid fa-book-open-reader fs-24 "></i>
             <span class="fs-24 ps-3">Library</span>
@@ -21,5 +20,4 @@
             <span class="fs-24 ps-3">Account</span>
         </div>
 
-        
-</div>
+</div>  

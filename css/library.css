@@ -1,0 +1,31 @@
+.dashboard{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    margin: 1rem;
+}
+
+.books-table {
+    order: 1;
+    min-width: 500px;
+    flex-grow: 1;
+}
+
+.filter{
+    order: 2;
+    width: 300px;
+    margin: 1rem    ;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
+}
+
+*:focus {
+    box-shadow: none !important;
+  }
+  
+  *[data-focus] {
+    box-shadow: none !important;
+  }
