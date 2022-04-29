@@ -26,13 +26,21 @@
     <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/library.css">
 
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />   --> 
+    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script> -->
+  
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />  
+           <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
+           <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>            
 </head>
 <body>
     <header>
         <?php require_once "./components/header.php" ?>
     </header>
     
-    <div class="d-flex">
+    <div class="d-flex nav-content-wrapper">
         <nav id="main-nav" >
             <?php require_once "./components/nav.php" ?>
         </nav>
@@ -40,155 +48,136 @@
         <div class="dashboard">
             
             <section class="filter">
+			
                 <h4 class="h4">Filter</h4>
             </section>
+			
+			
 
-            <section class="books-table">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control border-dark " placeholder="Search a title...      "  aria-describedby="button-addon2">
-                    <button class="btn btn-outline-danger" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
-                </div>
-                <section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Table #05</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="table-wrap">
-						<table class="table table-responsive-xl">
-						  <thead>
-						    <tr>
-						    	<th>&nbsp;</th>
-						    	<th>Email</th>
-						      <th>Username</th>
-						      <th>Status</th>
-						      <th>&nbsp;</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						    <tr class="alert" role="alert">
-						    	<td>
-						    		<label class="checkbox-wrap checkbox-primary">
-										  <input type="checkbox" checked>
-										  <span class="checkmark"></span>
-										</label>
-						    	</td>
-						      <td class="d-flex align-items-center">
-						      	<div class="img" style="background-image: url(images/person_1.jpg);"></div>
-						      	<div class="pl-3 email">
-						      		<span>markotto@email.com</span>
-						      		<span>Added: 01/03/2020</span>
-						      	</div>
-						      </td>
-						      <td>Markotto89</td>
-						      <td class="status"><span class="active">Active</span></td>
-						      <td>
-						      	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				            	<span aria-hidden="true"><i class="fa fa-close"></i></span>
-				          	</button>
-				        	</td>
-						    </tr>
-						    <tr class="alert" role="alert">
-						    	<td>
-						    		<label class="checkbox-wrap checkbox-primary">
-										  <input type="checkbox">
-										  <span class="checkmark"></span>
-										</label>
-						    	</td>
-						      <td class="d-flex align-items-center">
-						      	<div class="img" style="background-image: url(images/person_2.jpg);"></div>
-						      	<div class="pl-3 email">
-						      		<span>jacobthornton@email.com</span>
-						      		<span>Added: 01/03/2020</span>
-						      	</div>
-						      </td>
-						      <td>Jacobthornton</td>
-						      <td class="status"><span class="waiting">Waiting for Resassignment</span></td>
-						      <td>
-						      	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				            	<span aria-hidden="true"><i class="fa fa-close"></i></span>
-				          	</button>
-				        	</td>
-						    </tr>
-						    <tr class="alert" role="alert">
-						    	<td>
-						    		<label class="checkbox-wrap checkbox-primary">
-										  <input type="checkbox">
-										  <span class="checkmark"></span>
-										</label>
-						    	</td>
-						      <td class="d-flex align-items-center">
-						      	<div class="img" style="background-image: url(images/person_3.jpg);"></div>
-						      	<div class="pl-3 email">
-						      		<span>larrybird@email.com</span>
-						      		<span>Added: 01/03/2020</span>
-						      	</div>
-						      </td>
-						      <td>Larry_bird</td>
-						      <td class="status"><span class="active">Active</span></td>
-						      <td>
-						      	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				            	<span aria-hidden="true"><i class="fa fa-close"></i></span>
-				          	</button>
-				        	</td>
-						    </tr>
-						    <tr class="alert" role="alert">
-						    	<td>
-						    		<label class="checkbox-wrap checkbox-primary">
-										  <input type="checkbox">
-										  <span class="checkmark"></span>
-										</label>
-						    	</td>
-						      <td class="d-flex align-items-center">
-						      	<div class="img" style="background-image: url(images/person_4.jpg);"></div>
-						      	<div class="pl-3 email">
-						      		<span>johndoe@email.com</span>
-						      		<span>Added: 01/03/2020</span>
-						      	</div>
-						      </td>
-						      <td>Johndoe1990</td>
-						      <td class="status"><span class="active">Active</span></td>
-						      <td>
-						      	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				            	<span aria-hidden="true"><i class="fa fa-close"></i></span>
-				          	</button>
-				        	</td>
-						    </tr>
-						    <tr class="alert" role="alert">
-						    	<td class="border-bottom-0">
-						    		<label class="checkbox-wrap checkbox-primary">
-										  <input type="checkbox">
-										  <span class="checkmark"></span>
-										</label>
-						    	</td>
-						      <td class="d-flex align-items-center border-bottom-0">
-						      	<div class="img" style="background-image: url(images/person_1.jpg);"></div>
-						      	<div class="pl-3 email">
-						      		<span>garybird@email.com</span>
-						      		<span>Added: 01/03/2020</span>
-						      	</div>
-						      </td>
-						      <td class="border-bottom-0">Garybird_2020</td>
-						      <td class="status border-bottom-0"><span class="waiting">Waiting for Resassignment</span></td>
-						      <td class="border-bottom-0">
-						      	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				            	<span aria-hidden="true"><i class="fa fa-close"></i></span>
-				          	</button>
-				        	</td>
-						    </tr>
-						  </tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+            <section class="books-table" style="overflow: auto; height:80vh">
+				<h2 class="h2 text-center">EARIST LIBRARY</h2>
+				<table id="employee_data" class="table admin-library-table" >
+					<thead>
+						<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Title</th>
+						<th scope="col">Stock</th>
+						<th scope="col">Lended</th>
+						<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
 
-            </section>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+				
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>4</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>Available</td>
+                        </tr>
+						
+					</tbody>
+				</table>
 
+			</section>
         </div>
     </div>
 
@@ -197,5 +186,28 @@
             $( "#main-nav" ).slideToggle( "fast" );
         });
     </script>
+
+	<script>  
+		$(document).ready(function(){  
+			$('#employee_data').DataTable({
+                "lengthMenu": [
+                    [10,25,505,-1],
+                    [10,25,50, "All"]
+                 ],
+                responsive:true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder:"Search a tiitle",
+                }
+            });
+            
+            $('div.dataTables_length select').removeClass("input-sm");
+		});  
+
+
+        // $('div.dataTables_length select').ready(function(){
+        //     $('div.dataTables_length select').addClass("Asdsa");
+        // });
+	</script>  
 </body>
 </html>

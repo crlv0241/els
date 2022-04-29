@@ -58,4 +58,32 @@ form .form-control:focus {
   align-items: center;
 }
 
+.nav-content-wrapper{
+  min-height: calc( 100vh - 80px);
+}
+
+
+/* SCROLL BARS */
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #ccb8b8 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    max-height: 9px;
+    width: 9px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #ccb8b8;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
 

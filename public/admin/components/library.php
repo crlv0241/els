@@ -48,7 +48,7 @@
 
     <script>
         $( "#nav-toggler" ).click(function() {
-            $( "#main-nav" ).slideToggle( "fast" );
+            $( "#main-nav" ).slideToggle( "slow" );
         });
     </script>
 </body>

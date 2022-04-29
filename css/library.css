@@ -1,26 +1,50 @@
 .dashboard{
     display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
     margin: 1rem;
+    flex-grow: 1;
+    overflow: hidden;
+    gap:1rem;
+    max-height: 100vh;
+    padding-bottom: 1rem;
 }
 
 .books-table {
     order: 1;
-    min-width: 500px;
     flex-grow: 1;
+    margin-top: 2rem;
 }
 
 .filter{
     order: 2;
     width: 300px;
-    margin: 1rem    ;
+    margin-top: 2.5rem;
 }
 
-.accordion-button:focus {
-    box-shadow: none;
-    border-color: rgba(0,0,0,.125);
+select.input-sm{
+    line-height: 0;
 }
+
+.admin-library-table{
+    max-width: 700px;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width:900px) {
+    .filter{
+        order: 1;
+        width: 100%;
+        margin: 1rem 0;    ;
+    }
+
+    .books-table{
+        order: 2;
+    }
+
+    .dashboard{
+        display: block;
+    }
+}
+
 
 *:focus {
     box-shadow: none !important;
@@ -29,3 +53,10 @@
   *[data-focus] {
     box-shadow: none !important;
   }
+
+
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
+}

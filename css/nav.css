@@ -1,11 +1,16 @@
 .nav-div{
     width: 300px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
-    min-height: calc(100vh - 80px );
+    min-height: 100%;
 }
 
 .nav-item{
     padding: 2rem 2rem 2rem 75px;
+    cursor: pointer;
+}
+
+.nav-item:hover{
+    opacity: .5;
 }
 
 .active{
@@ -15,6 +20,7 @@
 @media screen and (max-width:1159px) {
     .nav-div {
         width: 100px;
+        height: 100%;
     }
 
     .nav-div span{
@@ -33,6 +39,12 @@
 @media screen and (min-width:900px){
     #main-nav{
         display: block !important;
+    }
+}
+
+@media (min-width:200px) and (max-width:780px) {
+    #main-nav{
+        display: none ;
     }
 }
 
