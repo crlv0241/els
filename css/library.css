@@ -2,22 +2,29 @@
     display: flex;
     margin: 1rem;
     flex-grow: 1;
-    overflow: hidden;
+    overflow:scroll;
     gap:1rem;
-    max-height: 100vh;
     padding-bottom: 1rem;
+    max-height: calc(100vh - 80px);
 }
 
 .books-table {
     order: 1;
     flex-grow: 1;
     margin-top: 2rem;
+    max-width: 700px;
+    overflow: auto;
+    padding-bottom: 1rem;
 }
 
 .filter{
     order: 2;
     width: 300px;
     margin-top: 2.5rem;
+}
+
+#employee_data{
+    overflow: auto;
 }
 
 select.input-sm{
@@ -38,6 +45,7 @@ select.input-sm{
 
     .books-table{
         order: 2;
+        height: calc(100vh - 400px);
     }
 
     .dashboard{

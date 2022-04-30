@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+html{
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 :root {
   --maroon: #771413;
 }
