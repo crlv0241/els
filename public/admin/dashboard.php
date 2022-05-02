@@ -60,7 +60,7 @@
 					<thead>
 						<tr>
 						<th scope="col">ID</th>
-						<th style="display:block;width: 200px;" scope="col">Title</th>
+						<th  scope="col">Title</th>
 						<th scope="col">Stock</th>
 						<th scope="col">Lended</th>
 						<th scope="col">Status</th>
@@ -202,6 +202,13 @@
             });
             
             $('div.dataTables_length select').removeClass("input-sm");
+
+            $(" #nav-item-library ").addClass( "active")
+            $(" #nav-item-library ").click(function (e){
+                e.preventDefault();
+            } );
+            
+
 		});  
 
 
