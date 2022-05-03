@@ -48,13 +48,29 @@
         <div class="dashboard d-block">
             <h2 class="h2">Add Item</h2>
             <form class="" style="max-width:920px ;">
-                <div class="row g-4">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="Select a category">Select a category</label>
+                        <select id="select-category" class="form-select" required>
+                            <option value="">-- Select a Category</option>
+                            <option value="Book">Book</option>
+                            <option value="Journal">Journal</option>
+                            <option value="Reference Work">Reference Work</option>
+                        </select>
+                    </div>
+
+                    <div id="div-isbn" class="col-md-6 ">
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
                     <div class="col-lg-5">
                         <label >Title</label>
                         <input type="text" class="form-control"  required>
                     </div>
                     <div class="col-lg-4">
-                        <label>Publisher</label>
+                        <label>Publisher</label>2          
                         <input type="text" class="form-control" placeholder="" required>
                     </div>
                     
@@ -65,15 +81,7 @@
                 </div>
         
                 <div class="row g-4 mt-1">
-                    <div class="col-md-4">
-                        <label for="Select a category">Select a category</label>
-                        <select class="form-select" required>
-                            <option value="">-- Select a Category</option>
-                            <option value="1">Book</option>
-                            <option value="2">Journal</option>
-                            <option value="3">Reference Work</option>
-                        </select>
-                    </div>
+                   
 
 
                     <div class="col-md-4">
@@ -82,8 +90,8 @@
                     </div>
 
                     <div class="col-md-4 " >
-                        <select id="select-edition" class="form-select p-0" style="border: none; ">
-                            <option value="none" >No editions</option>
+                        <select id="select-edition" class="form-select col-2 p-0" style="border: none; max-width:120px; cursor:pointer ">
+                            <option style="" value="none" >No editions</option>
                             <option value="Volume">Volume</option>
                             <option value="Chapter">Chapter</option>
                             <option value="Series">Series</option>
@@ -95,17 +103,11 @@
 
 
                 <div class="row mt-2 g-2">
-                    <div class="col-md-6 ">
-                        <label for="">Internation Standard Book Number (ISBN)</label>
-                        <input type="text" class="form-control" placeholder="Enter ISBN...">
-                    </div>
 
-                    <div class="col-md-6 ">
-                        <label  class="">Quantity</label>
-                        <div class="col-1" style="width: 100px;">
-                            <input id="author_count" min=1 type="number" class="form-control" required>
-                        </div>
-                </div>
+                <label style="padding:12px 4px 12px 4px" class="col-auto">Quantity</label>
+                    <div class="col-1" style="width: 100px;">
+                        <input id="" min=1  type="number" class="form-control" required>
+                    </div>
                 </div>    
                 
                 <div class="row g-4 mt-1">
@@ -119,11 +121,15 @@
                 <div class="row"  id="author-input-container">
                 </div>
                 
+                <div>
+                    <label for="">Description</label>
+                    <textarea class="textarea mt-1" name="" id="" cols="30" rows="5"></textarea>
+                </div>
                 
                 <div class="col-12">
                     <input class="btn btn-primary mt-1 col-12" type="submit" value="Submit">    
                 </div>
-           
+
             </form>
         </div>
     </div>
@@ -156,7 +162,24 @@
 
             });
 
+            
 
+            //ISBN SHOW UP
+            $("#select-category").change(function(){
+                let category = document.getElementById("select-category").value;
+                if(category == "Book")
+                    {
+                    document.getElementById("div-isbn").innerHTML = `
+                        <label for="">Internation Standard Book Number (ISBN)</label>
+                        <input type="text" class="form-control" placeholder="Enter ISBN...">`;
+                    }
+                else 
+                    {
+                        document.getElementById("div-isbn").innerHTML = ``;
+                    }
+                   
+            
+            });
 
 
             //produce n of inputs for n of authors
