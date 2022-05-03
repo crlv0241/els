@@ -1,12 +1,12 @@
 <?php
-    session_start();
+    // session_start();
 
-    $client = $_SESSION['client'] ?? null;
+    // $client = $_SESSION['client'] ?? null;
 
-    if ( !isset($client) )
-    {
-        header("location:login.php");
-    }
+    // if ( !isset($client) )
+    // {
+    //     header("location:login.php");
+    // }
 
 
 ?>

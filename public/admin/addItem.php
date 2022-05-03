@@ -1,12 +1,12 @@
 <?php
-    session_start();
+    // session_start();
 
-    $client = $_SESSION['client'] ?? null;
+    // $client = $_SESSION['client'] ?? null;
 
-    if ( !isset($client) )
-    {
-        header("location:login.php");
-    }
+    // if ( !isset($client) )
+    // {
+    //     header("location:login.php");
+    // }
 
 
 ?>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-lg-4">
                         <label>Publisher</label>
-                        <input type="text" class="form-control" placeholder="">
+                        <input type="text" class="form-control" placeholder="" required>
                     </div>
                     
                     <div class="col-lg-3">
@@ -63,46 +63,54 @@
                         <input type="date" class="form-control" id="inputPassword2" placeholder="" required>
                     </div>
                 </div>
-
+        
                 <div class="row g-4 mt-1">
-                    <div class="col-4">
+                    <div class="col-md-4">
+                        <label for="Select a category">Select a category</label>
                         <select class="form-select" required>
-                            <option selected>Category</option>
+                            <option value="">-- Select a Category</option>
                             <option value="1">Book</option>
                             <option value="2">Journal</option>
                             <option value="3">Reference Work</option>
                         </select>
                     </div>
+
+
+                    <div class="col-md-4">
+                        <label for="">Genre</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+           
+                    <div class="col-md-4 " >
+                        <select id="select-edition" class="form-select" style="border: none; ">
+                            <option value="none" >No editions</option>
+                            <option value="Volume">Volume</option>
+                            <option value="Chapter">Chapter</option>
+                            <option value="Series">Series</option>
+                        </select>
+                        <div id="div-number-input">
+                        </div>
+                    </div>
                 </div>
 
-
+    
                 
                 <div class="row g-4 mt-1">
-                        <label style="padding:12px 4px 12px 12px" class="col-auto">Number of Author/s</label>
-                        <div class="col-1" style="width: 100px;">
-                            <input id="author_count" min=1  max="10" type="number" class="form-control" required>
-                        </div>
+                    <label style="padding:12px 4px 12px 12px" class="col-auto">Number of Author/s</label>
+                    <div class="col-1" style="width: 100px;">
+                        <input id="author_count" min=1  max="10" type="number" class="form-control" required>
+                    </div>
                         
                 </div>
 
-                <div class="col-lg-7"  id="author-input-container">
+                <div class="row"  id="author-input-container">
                 </div>
                 
-                <div class="row">
--
-                    <div class="col-lg-3 mt-1">
-                        <select class="form-select col-6" aria-label="Default select example" style="border: none; ">
-                            <option selected>Editions</option>
-                            <option value="1">Volume</option>
-                            <option value="2">Chapter</option>
-                            <option value="3">Series</option>
-                        </select>
-                    </div>
-                    <div class="col-1">
-                        <input class="form-control" type="number">
-                    </div>
+                
+                <div class="col-12">
+                    <input class="button mt-1 button-primary col-12" type="submit" value="Submit">    
                 </div>
-                <input class="button button-primary" type="submit" value="Submit">    
+           
             </form>
         </div>
     </div>
@@ -112,13 +120,29 @@
             $( "#main-nav" ).slideToggle( "fast" );
         });
 
+
+   
+
         $(document).ready( function(){
             $(" #nav-item-addItem ").addClass( "active")
             $(" #nav-item-addItem ").click(function (e){
                 e.preventDefault();
             } )    
 
-            
+            //add number input based on selected edition
+            $("#select-edition").on('change' ,function(){
+                let edition  = document.getElementById("select-edition").value;
+                if(edition == "Volume" )
+                    document.getElementById("div-number-input").innerHTML = `<input class="form-control" min=1 placeholder="${edition} #" name="edition-number" type="number" required>`;
+                else if(edition == "Chapter")
+                    document.getElementById("div-number-input").innerHTML = `<input class="form-control"  min=1 placeholder="${edition} #" name="edition-number" type="number" required>` ;
+                else if(edition == "Series")
+                    document.getElementById("div-number-input").innerHTML = `<input class="form-control"  min=1 placeholder="${edition} #" name="edition-number" type="number" required>` ;
+                else
+                    document.getElementById("div-number-input").innerHTML = `` ;
+
+            });
+
             //produce n of inputs for n of authors
             $( "#author_count" ).change( function(){
                 document.getElementById("author-input-container").innerHTML = ""
@@ -137,9 +161,9 @@
 
                 for( let i = 0 ;i < author_count; i++){
                     document.getElementById("author-input-container").innerHTML += `
-                    <div>
+                    <div class="col-lg-6">
                         <label >Author ${i+1}</label>
-                        <input type="text" class="form-control" required>
+                        <input placeholder="Enter full name..." type="text" class="form-control" required>
                     </div>
                     `
                 }
