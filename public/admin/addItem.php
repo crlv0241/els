@@ -80,9 +80,9 @@
                         <label for="">Genre</label>
                         <input type="text" class="form-control" required>
                     </div>
-           
+
                     <div class="col-md-4 " >
-                        <select id="select-edition" class="form-select" style="border: none; ">
+                        <select id="select-edition" class="form-select p-0" style="border: none; ">
                             <option value="none" >No editions</option>
                             <option value="Volume">Volume</option>
                             <option value="Chapter">Chapter</option>
@@ -93,7 +93,20 @@
                     </div>
                 </div>
 
-    
+
+                <div class="row mt-2 g-2">
+                    <div class="col-md-6 ">
+                        <label for="">Internation Standard Book Number (ISBN)</label>
+                        <input type="text" class="form-control" placeholder="Enter ISBN...">
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <label  class="">Quantity</label>
+                        <div class="col-1" style="width: 100px;">
+                            <input id="author_count" min=1 type="number" class="form-control" required>
+                        </div>
+                </div>
+                </div>    
                 
                 <div class="row g-4 mt-1">
                     <label style="padding:12px 4px 12px 12px" class="col-auto">Number of Author/s</label>
@@ -108,7 +121,7 @@
                 
                 
                 <div class="col-12">
-                    <input class="button mt-1 button-primary col-12" type="submit" value="Submit">    
+                    <input class="btn btn-primary mt-1 col-12" type="submit" value="Submit">    
                 </div>
            
             </form>
@@ -122,8 +135,8 @@
 
 
    
-
         $(document).ready( function(){
+            //navigation active class
             $(" #nav-item-addItem ").addClass( "active")
             $(" #nav-item-addItem ").click(function (e){
                 e.preventDefault();
@@ -142,6 +155,9 @@
                     document.getElementById("div-number-input").innerHTML = `` ;
 
             });
+
+
+
 
             //produce n of inputs for n of authors
             $( "#author_count" ).change( function(){
