@@ -130,7 +130,7 @@
 
                     <div class="col-md-4 " >
                         <select name="edition" id="select-edition" class="form-select col-2 p-0" style="border: none; max-width:120px; cursor:pointer ">
-                            <option style="" value="none" >No editions</option>
+                            <option value="none" >No editions</option>
                             <option value="Volume">Volume</option>
                             <option value="Chapter">Chapter</option>
                             <option value="Series">Series</option>
