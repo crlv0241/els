@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="row g-4 mt-1">s
+                <div class="row g-4 mt-1">
                     <div class="col-lg-5">
                         <label >Title</label>
                         <input name="title" type="text" class="form-control"  required>
