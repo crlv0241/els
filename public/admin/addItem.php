@@ -1,4 +1,6 @@
 <?php
+
+    require_once "../../db/connecttion.php";
     // session_start();
 
     // $client = $_SESSION['client'] ?? null;
@@ -7,6 +9,35 @@
     // {
     //     header("location:login.php");
     // }
+
+    // if($_POST){
+    //     echo "<pre>";
+    //     var_dump($_POST);
+    //     echo "</pre>";
+    // }
+
+    if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addItem'])){
+        $title = $_POST['title'] ?? null;
+        $category = $_POST['category'] ?? null;
+        $isbn = $_POST['isbn'] ?? null;
+        $publisher = $_POST['publisher'] ?? null;
+        $date  = $_POST['date'] ?? null;
+        $genre  = $_POST['genre'] ?? null;
+        $edition_n  = $_POST['edition-number'] ?? null;
+        $quantity = $_POST['quantity'] ?? null;
+        $author_count  = $_POST['author_count'] ?? null;
+        $description  = $_POST['description'] ?? null;
+
+        $author = "";
+
+        for($i = 0; $i < $author_count; $i++)
+        {
+            $author .= $_POST["author".$i+1]." , ";
+        }
+        
+        
+      
+    }
 
 
 ?>
@@ -47,12 +78,12 @@
         
         <div class="dashboard d-block">
             <h2 class="h2">Add Item</h2>
-            <form class="" style="max-width:920px ;">
+            <form class="" style="max-width:920px ;" method="POST">
 
                 <div class="row">
                     <div class="col-md-4">
                         <label for="Select a category">Select a category</label>
-                        <select id="select-category" class="form-select" required>
+                        <select name="category" id="select-category" class="form-select" required>
                             <option value="">-- Select a Category</option>
                             <option value="Book">Book</option>
                             <option value="Journal">Journal</option>
@@ -67,16 +98,24 @@
                 <div class="row g-4 mt-1">
                     <div class="col-lg-5">
                         <label >Title</label>
-                        <input type="text" class="form-control"  required>
+                        <input name="title" type="text" class="form-control"  required>
                     </div>
                     <div class="col-lg-4">
                         <label>Publisher</label>2          
-                        <input type="text" class="form-control" placeholder="" required>
+                        <input name="publisher" type="text" class="form-control" placeholder="" required>
                     </div>
                     
+                    <!-- GETTING YEARS -->
+                    <?php $years = range(1900, strftime("%Y", time())); ?>
+
                     <div class="col-lg-3">
-                        <label >Published Date</label>
-                        <input type="date" class="form-control" id="inputPassword2" placeholder="" required>
+                        <label >Publication Date</label>
+                        <select name="date" class="form-control">
+                            <option>Select Year</option>
+                                <?php foreach($years as $year) : ?>
+                                    <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
         
@@ -86,11 +125,11 @@
 
                     <div class="col-md-4">
                         <label for="">Genre</label>
-                        <input type="text" class="form-control" required>
+                        <input name="genre" type="text" class="form-control" required>
                     </div>
 
                     <div class="col-md-4 " >
-                        <select id="select-edition" class="form-select col-2 p-0" style="border: none; max-width:120px; cursor:pointer ">
+                        <select name="edition" id="select-edition" class="form-select col-2 p-0" style="border: none; max-width:120px; cursor:pointer ">
                             <option style="" value="none" >No editions</option>
                             <option value="Volume">Volume</option>
                             <option value="Chapter">Chapter</option>
@@ -106,14 +145,14 @@
 
                 <label style="padding:12px 4px 12px 4px" class="col-auto">Quantity</label>
                     <div class="col-1" style="width: 100px;">
-                        <input id="" min=1  type="number" class="form-control" required>
+                        <input name="quantity" id="" min=1  type="number" class="form-control" required>
                     </div>
                 </div>    
                 
                 <div class="row g-4 mt-1">
                     <label style="padding:12px 4px 12px 12px" class="col-auto">Number of Author/s</label>
                     <div class="col-1" style="width: 100px;">
-                        <input id="author_count" min=1  max="10" type="number" class="form-control" required>
+                        <input name="author_count" id="author_count" min=1  max="10" type="number" class="form-control" required>
                     </div>
                         
                 </div>
@@ -123,11 +162,11 @@
                 
                 <div>
                     <label for="">Description</label>
-                    <textarea class="textarea mt-1" name="" id="" cols="30" rows="5"></textarea>
+                    <textarea name="description" class="textarea mt-1" name="" id="" cols="30" rows="5"></textarea>
                 </div>
                 
                 <div class="col-12">
-                    <input class="btn btn-primary mt-1 col-12" type="submit" value="Submit">    
+                    <input name="addItem" class="btn btn-primary mt-1 col-12" type="submit" value="Add Item">    
                 </div>
 
             </form>
@@ -171,7 +210,7 @@
                     {
                     document.getElementById("div-isbn").innerHTML = `
                         <label for="">Internation Standard Book Number (ISBN)</label>
-                        <input type="text" class="form-control" placeholder="Enter ISBN...">`;
+                        <input name="isbn" type="text" class="form-control" placeholder="Enter ISBN...">`;
                     }
                 else 
                     {
@@ -202,7 +241,7 @@
                     document.getElementById("author-input-container").innerHTML += `
                     <div class="col-lg-6">
                         <label >Author ${i+1}</label>
-                        <input placeholder="Enter full name..." type="text" class="form-control" required>
+                        <input name="author${i+1}" placeholder="Enter full name..." type="text" class="form-control" required>
                     </div>
                     `
                 }
