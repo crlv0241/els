@@ -8,6 +8,7 @@
     //     header("location:login.php");
     // }
 
+    require_once "../../db/connecttion.php";
 
 ?>
 
@@ -55,125 +56,35 @@
 			
 
             <section class="books-table" style="height:calc(100vh - 140px)">
-				<h2 class="h2 text-center">EARIST LIBRARY</h2>
-				<table id="employee_data" class="table admin-library-table" >
+				<table id="employee_data" class="mt-3 border table  table-hover" >
 					<thead>
 						<tr>
-						<th scope="col">ID</th>
-						<th  scope="col">Title</th>
-						<th scope="col">Stock</th>
-						<th scope="col">Lended</th>
-						<th scope="col">Status</th>
+						<th  class="border" scope="col">Title</th>
+						<th  class="border" scope="col">Authors</th>
+						<th  class="border" scope="col">Genre</th>
+						<th  class="border" scope="col">QTY</th>
+						<th  class="border" scope="col">Available</th>
+						<th  class="border" scope="col">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
+                    <!-- GET THE BOOKS  -->
+                    <?php 
+                        $stm = $PDO -> prepare("SELECT * FROM tbl_items");
+                        $stm -> execute();
+                        while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+                        <tr style="cursor: pointer;" onclick="showItemDetail(<?php echo $row['id'] ?>)">
+                            <td   class="border"><?php echo $row['title'] ?></td>
+                            <td   class="border"><?php echo $row['author'] ?></td>
+                            <td   class="border"><?php echo $row['genre'] ?></td>
+                            <td   class="border"><?php echo $row['quantity'] ?></td>
+                            <td   class="border"><?php echo $row['quantity'] ?></td>
+                            <td  class="border">Available</td>
                         </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-				
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>4</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, aperiam!</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Available</td>
-                        </tr>
-						
+                    <?php endwhile; ?>
+                      
 					</tbody>
 				</table>
 
@@ -194,10 +105,13 @@
                     [10,25,505,-1],
                     [10,25,50, "All"]
                  ],
+                 "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [ 5 ] }, 
+                ],
                 responsive:true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder:"Search a tiitle",
+                    searchPlaceholder:"Search a title ...",
                 }
             });
             

@@ -1,7 +1,6 @@
 <?php
 
 
-
 // include('smtp/PHPMailerAutoload.php');
 // function smtp_mailer($to, $subject, $msg)
 // {

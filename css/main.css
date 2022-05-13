@@ -92,3 +92,6 @@ form .form-control:focus {
     border: 3px solid #ffffff;
   }
 
+  .modal-backdrop{
+    z-index: 1;
+  }
