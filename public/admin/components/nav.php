@@ -2,14 +2,14 @@
     <a style="color: gray;" href="dashboard.php">
         <div id="nav-item-library" class="nav-item">
             <i class="fa-solid fa-book-open-reader fs-24 "></i>
-            <span class="fs-24 ps-3">Library</span>
+            <span class="fs-24 ps-3">Catalogs</span>
         </div>
     </a>
 
     <a href="addItem.php">
         <div id="nav-item-addItem" class="nav-item ">
             <i class="fa-solid fa-book-open fs-24"></i>
-            <span class="fs-24 ps-3">Add Item</span>
+            <span class="fs-24 ps-3">Add Catalog</span>
         </div>
     </a>
     <a href="#">

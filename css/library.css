@@ -28,6 +28,14 @@ table.dataTable thead .sorting:after {
     content: "" !important;
 }
 
+table.dataTable thead th{
+    background-color: var(--maroon);
+    color: white !important;
+    padding: 4px 12px !important;
+}
+
+
+
 .filter{
     order: 2;
     width: 300px;
@@ -46,6 +54,12 @@ select.input-sm{
     max-width: 700px;
     box-sizing: border-box;
 }
+
+
+.actions i {
+    cursor: pointer;
+}
+
 
 @media screen and (max-width:900px) {
     .filter{
@@ -79,3 +93,4 @@ select.input-sm{
     box-shadow: none;
     border-color: rgba(0,0,0,.125);
 }
+

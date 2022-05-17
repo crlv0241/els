@@ -56,7 +56,8 @@
 			
 
             <section class="books-table" style="height:calc(100vh - 140px)">
-				<table id="employee_data" class="mt-3 border table  table-hover" >
+                    <h1 style="background-color: var(--maroon); padding:.5rem;text-align:center; color:white">Catalogs</h1>
+                    <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead>
 						<tr>
 						<th  class="border" scope="col">Title</th>
@@ -75,22 +76,82 @@
                         $stm -> execute();
                         while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                     ?>
-                        <tr style="cursor: pointer;" onclick="showItemDetail(<?php echo $row['id'] ?>)">
+                        <tr>
                             <td   class="border"><?php echo $row['title'] ?></td>
                             <td   class="border"><?php echo $row['author'] ?></td>
                             <td   class="border"><?php echo $row['genre'] ?></td>
                             <td   class="border"><?php echo $row['quantity'] ?></td>
                             <td   class="border"><?php echo $row['quantity'] ?></td>
-                            <td  class="border">Available</td>
+                            <td  class="border">
+                                <div class="actions" style="display: flex; justify-content:space-between;">
+                                    <i data-id="<?php echo $row['id'] ?>" class="info fa-regular fa-circle-question"></i>
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </div>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
-                      
+                     
 					</tbody>
 				</table>
 
 			</section>
         </div>
     </div>
+   
+    <div class="div-info">
+        <!-- <div class="shadow" style="display:flex; justify-content:center; align-items:center; position: absolute; height:100vh; width:100vw; background-color:rgba(0,0,0,0.5); top:0">
+            <div class="catalog-info" style="background-color:white ;">
+                <h1>sample title</h1>
+                <table>
+                    <tr>
+                        <th>Author</th>
+                        <td>Names C Name</td>
+                    </tr>
+                </table>
+            </div>
+        </div> -->
+    </div>
+
+    <script>
+
+        $(".info").each(function() {
+            $(this).click(function(){
+                let id = this.dataset.id;
+                $.ajax({
+                    dataType: "text",
+                    method: "POST",
+                    url:"../../actions.php",
+                    data: {
+                        action:"getInfo",
+                        id:id,
+                    },
+                    success: function(data){
+                        console.log(data);
+                    },
+                });
+             }) 
+        });                   
+
+        // function getInfo( id ){
+        //     console.log(id);
+        //     $.ajax({
+        //         dataType: "text",
+        //         method: "POST",
+        //         url:"../../actions.php",
+        //         data: {
+        //             action:getInfo,
+        //             id:id,
+        //         },
+        //         success: function(data){
+        //             console.log(data);
+        //         },
+        //         error: function(status){
+        //             console.log(status);
+        //         }
+        //     });
+        // }
+    </script>
 
     <script>
         $( "#nav-toggler" ).click(function() {

@@ -4,7 +4,7 @@
     </div>
 
     <div class="system-name-wrapper">
-        <h1 class="fs-24 bold fc-white">EARIST LIBRARY SYSTEM</h1>
+        <h1 class="fs-24 bold fc-white">GMATHS LIBRARY SYSTEM</h1>
     </div>
 
     <!-- Example single danger button -->
