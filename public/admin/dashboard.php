@@ -48,10 +48,10 @@
         
         <div class="dashboard">
             
-            <section class="filter">
+            <!-- <section class="filter">
 			
                 <h4 class="h4">Filter</h4>
-            </section>
+            </section> -->
 			
 			
 
@@ -61,6 +61,7 @@
 					<thead>
 						<tr>
 						<th  class="border" scope="col">Title</th>
+						<th  class="border" scope="col">Category</th>
 						<th  class="border" scope="col">Authors</th>
 						<th  class="border" scope="col">Genre</th>
 						<th  class="border" scope="col">QTY</th>
@@ -78,56 +79,75 @@
                     ?>
                         <tr>
                             <td   class="border"><?php echo $row['title'] ?></td>
+                            <td   class="border"><?php echo $row['category'] ?></td>
                             <td   class="border"><?php echo $row['author'] ?></td>
                             <td   class="border"><?php echo $row['genre'] ?></td>
-                            <td   class="border"><?php echo $row['quantity'] ?></td>
-                            <td   class="border"><?php echo $row['quantity'] ?></td>
+                            <td   class="border" ><?php echo $row['quantity'] ?></td>
+                            <td   class="border" style="font-weight: bold; color:green"><?php echo $row['quantity'] ?></td>
                             <td  class="border">
                                 <div class="actions" style="display: flex; justify-content:space-between;">
-                                    <i data-id="<?php echo $row['id'] ?>" class="info fa-regular fa-circle-question"></i>
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                    <i class="fa-regular fa-trash-can"></i>
+                                    <span>
+
+                                        <i data-id="<?php echo $row['id'] ?>" class="info fa-regular fa-circle-question"></i>
+                                    </span>
+                                    <a style="color:black" href = "editCatalog.php?id=<?php echo  $row['id'] ?>">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                    <span>
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </span>
                                 </div>
                             </td>
                         </tr>
                     <?php endwhile; ?>
-                     
 					</tbody>
 				</table>
-
 			</section>
         </div>
     </div>
    
-    <div class="div-info">
+
+    <!-- SAMPLE POP UP INFO -->
+    <div class="div-info" id="div-info">
         <!-- <div class="shadow" style="display:flex; justify-content:center; align-items:center; position: absolute; height:100vh; width:100vw; background-color:rgba(0,0,0,0.5); top:0">
-            <div class="catalog-info" style="background-color:white ;">
-                <h1>sample title</h1>
-                <table>
-                    <tr>
-                        <th>Author</th>
-                        <td>Names C Name</td>
-                    </tr>
-                </table>
+            <div class="catalog-info" style="background-color:white; position:relative ;">    
+                <div style="position:absolute; top:0; left:0; display:flex; width:100%; justify-content:space-between; background-color: var(--maroon);">
+                    <span style="padding: 0 1rem; color: white">Catalog Information </span>
+                    <span onclick="clearHtml('div-info')" ><i style="padding: 4px; color:white" class="fa-solid fa-xmark"></i></span>
+                </div>
+                <br>
+                <h1 class="h2" style="color: var(--maroon); font-family: Roboto Slab, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet..</h1>   
+                <p style="font-style:italic; margin-top:12px">Category</p>
+                <p>Volume 1</p>
+                <p>Author/s:  </p>
+                <p>Published on 2021</p>
+                <p style="margin-top:1rem ;">Description</p>
+                <p style="padding: 0 1rem;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus delectus ut neque voluptatem, similique at minus molestias eligendi explicabo! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi quo hic architecto ipsam tempore facere modi, ducimus sunt praesentium voluptatibus.</p>
             </div>
         </div> -->
     </div>
 
     <script>
 
+        function clearHtml(classname){
+            console.log("asda");
+            document.getElementById(classname).innerHTML = "";
+        }
+
         $(".info").each(function() {
             $(this).click(function(){
                 let id = this.dataset.id;
                 $.ajax({
-                    dataType: "text",
+                    dataType: "html",
                     method: "POST",
                     url:"../../actions.php",
                     data: {
                         action:"getInfo",
-                        id:id,
+                        id: id,
                     },
                     success: function(data){
                         console.log(data);
+                        document.getElementById("div-info").innerHTML = data;
                     },
                 });
              }) 
