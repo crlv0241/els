@@ -29,7 +29,7 @@
         $edition       = $_POST['edition'] ?? "none";
         $edition_n     = $_POST['edition-number'] ?? 0;
         $quantity      = $_POST['quantity'] ?? null;
-        $authorCount  = $_POST['authorCount'] ?? null;
+        $authorCount   = $_POST['authorCount'] ?? null;
         $author        = "";
         $description   = $_POST['description'] ?? null;
         $img           = $_POST['img'] ?? null;
@@ -136,6 +136,10 @@
                     </div>
 
                     <div id="div-isbn" class="col-md-6 ">
+                        <?php if( $res['isbn'] ): ?>
+                            <label for="">Internation Standard Book Number (ISBN)</label>
+                            <input name="isbn" id="isbn" value="<?php echo $res['isbn'] ?>" onchange = "getBookDetails('isbn')" type="number" class="form-control" placeholder="Enter ISBN...">`;
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -190,7 +194,7 @@
 
                 <label style="padding:12px 4px 12px 4px" class="col-auto">Quantity</label>
                     <div class="col-1" style="width: 100px;">
-                        <input value="<?php echo $res['quantity'] ?>" name="quantity" id="" min=1  type="number" class="form-control" required>
+                        <input value="<?php echo $res['quantity'] ?>" name="quantity" id="" min=0  type="number" class="form-control" required>
                     </div>
                 </div>    
                 
