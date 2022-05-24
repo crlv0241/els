@@ -20,13 +20,17 @@
         <div class="user signinBx">
           <div class="imgBx"><img  src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" /></div>
           <div class="formBx">
-            <form action="" onsubmit="">
+            <form id="login">
             <div style="display: flex; justify-content:center; ">
                 <img width="100px" src="./images/system/logo.png" alt="">
             </div>
               <h2>Sign In</h2>
-              <input type="text" name="" placeholder="Learner Reference Number" />
-              <input type="password" name="" placeholder="Password" />
+              <div id="login-message">
+
+              </div>
+              <input type="hidden" name="action" value="login">
+              <input type="text" name="lrn" placeholder="Learner Reference Number" required />
+              <input type="password" name="password" placeholder="Password" required/>
               <input type="submit" name="" value="Login" />
               <p class="signup">
                 Don't have an account ?
@@ -37,7 +41,7 @@
         </div>
         <div class="user signupBx">
           <div class="formBx">
-            <form id="signup" action="javascript:;" enctype="multipart/form-data">
+            <form id="signup" method="POST"  enctype="multipart/form-data">
               <h2>Create an account</h2>
               <div id="div-info"></div>
               <input type="hidden" name="action" value="btn-signup">
@@ -92,13 +96,13 @@
 
                     if(data == "Account created successfully, please wait for the admin for activation"){
                         document.getElementById("div-info").innerHTML = `
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
                             ${data}
                         </div>
                         `;
                     } else {
                         document.getElementById("div-info").innerHTML = `
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
                             ${data}
                         </div>
                         `;
@@ -108,6 +112,39 @@
 
                 }
             });
+        });
+
+
+
+        $("#login").submit( function(e){
+          e.preventDefault();
+
+          $.ajax({
+            method:"POST",
+            url: "actions.php",
+            data: $(this).serialize(),
+            dataType: "text",
+            success: function(response){
+              console.log(response);
+            
+              if(response == "Login Successfully"){
+                        document.getElementById("login-message").innerHTML = `
+                        <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                            ${response}
+                        </div>
+                        `;
+                    } else {
+                        document.getElementById("login-message").innerHTML = `
+                        <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                            ${response}
+                        </div>
+                        `;
+
+                    }
+            }
+
+          });
+
         });
     </script>
 

@@ -3,6 +3,8 @@
 
 
 
+    // =======  ADMIN ACTIONS ==========//
+    // GETINFO CATALOG
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "getInfo"){
 
         
@@ -50,6 +52,8 @@
         echo '</div> </div>';
     }
 
+
+    // DELETE CATALOG INFO
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "deleteInfo"){
 
         
@@ -100,6 +104,7 @@
         echo '</div> </div>';
     }
 
+    //DELETE CATALOG
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "deleteCatalog"){
 
         $id = (int) $_POST['id'];
@@ -109,6 +114,13 @@
         echo "Succesfully Deleted";
     }
 
+
+
+
+
+
+
+    // ============ USER ACTIONS ============= //
     //SIGN UP
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-signup"){
         $sid = $_POST['sid'];
@@ -137,11 +149,11 @@
             $stm -> bindValue( 1 , $sid );
             $stm -> bindValue( 2 , $name );
             $stm -> bindValue( 3 , $email );
-            $stm -> bindValue( 4 , md5($psw) );
+            $stm -> bindValue( 4 , md5( $psw ) );
             $stm -> bindValue( 5 , $path . '/' . $imgName );
 
             if( $stm->execute()){
-                echo "Account created successfully, please wait for the admin for activation";
+                echo "Account created successfully  , please wait for the admin for activation";
             }
         }
 
@@ -153,4 +165,33 @@
 
     }
 
+    // LOGIN
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "login"){
+        
+        $lrn = $_POST['lrn'];
+        $password = md5( $_POST['password'] );
+
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE sid = ? AND password = ?" );
+        $stm -> bindValue( 1 , $lrn );
+        $stm -> bindValue( 2 , $password );
+
+        $stm -> execute();
+
+        if( $stm -> rowCount() == 1){
+            $res = $stm -> fetch(PDO::FETCH_ASSOC);
+
+            if( $res['isActivated'] == 1 ){
+                session_start();
+                $_SESSION['user'] = $res;
+
+                echo "Login Successfully";
+                
+            } 
+            else{
+                echo "Your account is not yet activated";
+            }
+        } else {
+            echo "Invalid LRN or assword";
+        }
+    }
 
