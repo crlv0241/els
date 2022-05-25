@@ -27,8 +27,7 @@
         </div>
     </div>
 
-
     <i id="nav-toggler" class="fa-solid fa-bars"></i>        
-
+        
     
 </div>

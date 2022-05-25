@@ -267,10 +267,6 @@
 
 		});  
 
-
-        // $('div.dataTables_length select').ready(function(){
-        //     $('div.dataTables_length select').addClass("Asdsa");
-        // });
 	</script>  
 </body>
 </html>

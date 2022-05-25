@@ -1,56 +1,162 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        .custom-shape-divider-bottom-1653221553 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
-}
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/login.css">
 
-.custom-shape-divider-bottom-1653221553 svg {
-    position: relative;
-    display: block;
-    width: calc(192% + 1.3px);
-    height: 183px;
-}
-
-.custom-shape-divider-bottom-1653221553 .shape-fill {
-    fill: #FFFFFF;
-}
-    </style>
+    <!-- JQUERY CDN -->
+    
+    <link rel="stylesheet" href="../../css/jquery.passwordRequirements.css" />
+    
+ 
 </head>
 <body>
-    <div style="position:relative; background-color:Green;">
-    <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <h2>Sample</h2>
-        <br>
-        <br>
-        <br>
+  
+    <section>
+      <div class="container">
+        <div class="user signinBx">
+          <div class="imgBx"><img  src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" /></div>
+          <div class="formBx">
+            <form id="login">
+            <div style="display: flex; justify-content:center; ">
+                <img width="100px" src="../../images/system/logo.png" alt="">
+            </div>
+              <h2>Sign In</h2>
+              <div id="login-message">
+              </div>
+              <input type="hidden" name="action" value="login">
+              <input type="text" name="lrn" placeholder="Learner Reference Number" required />
+              <input type="password" name="password" placeholder="Password" required/>
+              <input type="submit" name="" value="Login" />
+              <p class="signup">
+                Don't have an account ?
+                <a href="#" onclick="toggleForm();">Sign Up.</a>
+              </p>
+            </form>
+          </div>
+        </div>
+        <div class="user signupBx">
+          <div class="formBx">
+            <form id="signup" method="POST"  enctype="multipart/form-data">
+              <h2>Create an account</h2>
+              <div id="div-info"></div>
+              <input type="hidden" name="action" value="btn-signup">
+              <input type="text" name="sid" placeholder="Learner Reference Number" required />
+              <input type="text" name="name" placeholder="Full Name" required/>
+              <input type="email" name="email" placeholder="Email" required/>
+              <input type="password" class="pr-password" name="password" placeholder="Create Password" required/>
+            <div class="mb-3">
+                School ID
+                <input class="form-control" name="imgid" accept="image/*"  type="file" id="formFile" required>
+            </div>
 
-        <div class="custom-shape-divider-bottom-1653221553">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
-        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
-        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
-    </svg>
-</div>
-    </div>
-</body>
+              <input type="submit"  value="Sign Up" />
+              <p class="signup">
+                Already have an account ?
+                <a href="#" onclick="toggleForm();">Sign in.</a>
+              </p>
+            </form>
+          </div>
+          <div class="imgBx"><img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" /></div>
+        </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="../../js/jquery.passwordRequirements.min.js"></script>
+    <script>
+        const toggleForm = () => {
+            const container = document.querySelector('.container');
+            container.classList.toggle('active');
+        };
+
+        $("#signup").submit( function(e){
+            e.preventDefault();
+
+            let form = $("#signup")[0];
+            let formData = new FormData(form);
+
+            console.log(formData);
+
+            $.ajax({
+                url: "../../actions.php",
+                method: "POST",
+                data: formData,
+                enctype: 'multipart/form-data',
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                dataType: "text",
+                success: function (data){
+                    console.log(data);
+
+                    if(data == "1"){
+                        document.getElementById("div-info").innerHTML = `
+                        <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                            Account created succesfully, admin will review your details.
+                        </div>
+                        `;
+                    } else {
+                        document.getElementById("div-info").innerHTML = `
+                        <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                            LRN is already registered.
+                        </div>
+                        `;
+                    }
+
+                    document.getElementById("signup").reset();
+
+                }
+            });
+        });
+
+
+
+        $("#login").submit( function(e){
+          e.preventDefault();
+
+          $.ajax({
+            method:"POST",
+            url: "../../actions.php",
+            data: $(this).serialize(),
+            dataType: "text",
+            success: function(response){
+              console.log(response);
+            
+              if(response == "Login Successfully"){
+                        document.getElementById("login-message").innerHTML = `
+                        <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                            ${response}
+                        </div>
+                        `;
+                    } else {
+                        document.getElementById("login-message").innerHTML = `
+                        <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                            ${response}
+                        </div>
+                        `;
+
+                    }
+            }
+
+          });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function (){
+            $(".pr-password").passwordRequirements({
+                numCharacters: 8,
+                useLowercase: true,
+                useUppercase: true,
+                useNumbers: true,
+                useSpecial: true
+            });
+        });
+    </script>
+  </body>
 </html>

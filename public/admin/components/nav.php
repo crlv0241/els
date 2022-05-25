@@ -1,47 +1,68 @@
-<div class="nav-div">
+<div class="nav-div" title="Catalogs">
     <a style="color: gray;" href="dashboard.php">
         <div id="nav-item-library" class="nav-item">
             <i class="fa-solid fa-book-open-reader fs-24 "></i>
-            <span class="fs-24 ps-3">Catalogs</span>
+            <span class="nav-name fs-24 ps-3">Catalogs</span>
         </div>
     </a>
 
-    <a href="addItem.php">
+    <a href="addItem.php" title="Add Catalog">
         <div id="nav-item-addItem" class="nav-item ">
             <i class="fa-solid fa-book-open fs-24"></i>
-            <span class="fs-24 ps-3">Add Catalog</span>
+            <span class="nav-name fs-24 ps-3">Add Catalog</span>
         </div>
     </a>
     <a href="#">
 
         <div class="nav-item ">
             <i class="fa-solid fa-swatchbook fs-24"></i>
-            <span class="fs-24 ps-3">Reservations</span>
+            <span class="nav-name fs-24 ps-3">Reservations</span>
         </div>
     </a>
 
     <a href="">
         <div class="nav-item position-relative">
             <i class="fa-solid fa-clone fs-24"></i>
-            <span class="fs-24 ps-3 position-relative px-2">Borrow
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                99+
-                <span class="visually-hidden">unread messages</span>
-            </span>
+            <span class="nav-name fs-24 ps-3 position-relative px-2">
+                Borrow
             </span>
             
         </div>
     </a>
 
-    <a href="">
-        <div class="nav-item position-relative">
-            <i class="fa-solid fa-clone position-relative fs-24"> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    99+
-                </span></i>
-            <span class="fs-24 ps-3 position-relative px-2">
+    <?php 
+  
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE isActivated = 0" );
+        $stm -> execute();
+        $nPendingAccount = $stm->rowCount();
+
+
+    ?>
+
+    <a href="../admin/pendingAccount.php" title="Pending Accounts">
+        <div id="nav-item-pending" class="nav-item position-relativ" style="display:flex ; align-items:center">
+            <span style="width:auto ; position:relative; ">
+                <i style="display: inline-block;" class="fa-solid fa-person-circle-question position-relative fs-24"> </i>
+                <?php if($nPendingAccount > 0): ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?php echo $nPendingAccount ?>
+                    </span>
+                <?php endif; ?>
+            </span>
+            <span class="nav-name fs-24 ps-3 position-relative px-2" >
                 Pending Account
             </span>
-            
+        </div>
+    </a>
+
+    <a href="../admin/accounts.php" title="Accounts">
+        <div id="nav-item-approved" class="nav-item position-relativ" style="display:flex ; align-items:center">
+            <span style="width:auto ; position:relative; ">
+                <i style="display: inline-block;" class="fa-solid fa-user-group position-relative fs-24"> </i>
+            </span>
+            <span class="nav-name fs-24 ps-3 position-relative px-2" >
+                Accounts
+            </span>
         </div>
     </a>
 

@@ -24,8 +24,8 @@
         height: 100%;
     }
 
-    .nav-div span{
-        display: none;
+    .nav-div .nav-name{
+        display: none !important;
     }
 
     .nav-item{
@@ -33,7 +33,7 @@
         justify-content: center;
         align-items:center;
         padding: 0;
-        height: 100px;
+        height: 65px;
     }
 }
 

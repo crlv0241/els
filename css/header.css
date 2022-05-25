@@ -69,6 +69,29 @@
     #nav-toggler{
         display: block;
     }
+
+    .logo-wrapper {
+        order: 2;
+        width: auto;
+        padding-left: 2rem;
+    }
+
+
+    .system-name-wrapper{
+        order: 3;
+    }
+
+    .profile-wrappe{
+        order: 4;
+    }
+
+    #nav-toggler{
+        order: 1;
+        width:100px !important;
+        margin-right: 0;
+        text-align: center;
+        border-right: 1px solid white;
+    }
 }
 
 

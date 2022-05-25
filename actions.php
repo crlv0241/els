@@ -114,10 +114,32 @@
         echo "Succesfully Deleted";
     }
 
+    //APPROVED ACCOUNT
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "approveAccount"){
+        $lrn = $_POST['lrn'];
+        
+        $stm = $PDO -> prepare( "UPDATE tbl_pending_account SET isActivated = 1  WHERE sid = '$lrn'" );
+        $stm ->execute();
 
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE sid = '$lrn'" );
+        $stm ->execute();
 
+        $res = $stm -> fetch(PDO::FETCH_ASSOC);
+        $name = $res['name'];
+        $lrn = $res['sid'];
+        $email = $res['email'];
+        $password = $res['password'];
 
+        $stm = $PDO -> prepare( "INSERT INTO tbl_accounts(lrn, name , email, password)  VALUE (? , ? , ? , ?) ");
+        $stm -> bindValue( 1 , $lrn);
+        $stm -> bindValue( 2 , $name);
+        $stm -> bindValue( 3 , $email);
+        $stm -> bindValue( 4 , $password);
+        $stm ->execute();
 
+        echo "Account was succesfully activated";
+        
+    }
 
 
     // ============ USER ACTIONS ============= //
@@ -153,16 +175,14 @@
             $stm -> bindValue( 5 , $path . '/' . $imgName );
 
             if( $stm->execute()){
-                echo "Account created successfully  , please wait for the admin for activation";
+                echo "1";
             }
         }
 
         else
         {
-            echo "Account is already existing";
+            echo "2";
         }
-
-
     }
 
     // LOGIN
@@ -171,9 +191,10 @@
         $lrn = $_POST['lrn'];
         $password = md5( $_POST['password'] );
 
-        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE sid = ? AND password = ?" );
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE (sid = ?  OR email = ? ) AND password = ?" );
         $stm -> bindValue( 1 , $lrn );
-        $stm -> bindValue( 2 , $password );
+        $stm -> bindValue( 2 , $lrn );
+        $stm -> bindValue( 3 , $password );
 
         $stm -> execute();
 
@@ -195,3 +216,35 @@
         }
     }
 
+    //CREATE NEW USER IN SYSTEM
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-createUser"){
+        $sid = $_POST['sid'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $psw =  $_POST['password'];
+
+        $stm = $PDO -> prepare("SELECT * from tbl_accounts WHERE lrn = '$sid'");
+        $stm->execute();
+
+        if( $stm->rowCount() == 0 )
+        {
+            $stm = $PDO -> prepare( "INSERT INTO tbl_accounts (lrn, name, email, password) VALUES (?,?,?,?)");
+            $stm -> bindValue( 1 , $sid );
+            $stm -> bindValue( 2 , $name );
+            $stm -> bindValue( 3 , $email );
+            $stm -> bindValue( 4 , md5( $psw ) );
+
+            if( $stm->execute()){
+                echo '<div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                Account was created successfully
+                </div>';
+            }
+        }
+
+        else
+        {
+            echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                Account is already existing
+                </div>';
+        }
+    }
