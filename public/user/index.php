@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  if( isset($_SESSION['user']) ){
+    header("location:catalogs.php");
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +36,7 @@
               <div id="login-message">
               </div>
               <input type="hidden" name="action" value="login">
-              <input type="text" name="lrn" placeholder="Learner Reference Number" required />
+              <input type="text" name="lrn" placeholder="LRN or Email" required />
               <input type="password" name="password" placeholder="Password" required/>
               <input type="submit" name="" value="Login" />
               <p class="signup">
@@ -92,7 +99,7 @@
                 dataType: "text",
                 success: function (data){
                     console.log(data);
-
+                    
                     if(data == "1"){
                         document.getElementById("div-info").innerHTML = `
                         <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
@@ -132,6 +139,8 @@
                             ${response}
                         </div>
                         `;
+
+                        window.location.assign("catalogs.php");
                     } else {
                         document.getElementById("login-message").innerHTML = `
                         <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">

@@ -9,8 +9,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse1" style="justify-content:flex-end; ">
                 <div class="navbar-nav" >
-                    <a href="#" class="nav-item-catalogs nav-link">Catalogs</a>
-                    <a href="#" class="nav-item-bookmarks nav-link">Bookmarks</a>
+                    <a href="catalogs.php" class="nav-item-catalogs nav-link">Catalogs</a>
+                    <a href="bookmark.php" class="nav-item-bookmarks nav-link">Bookmarks</a>
                     <a href="#" class="nav-item-reservations nav-link">Reservations</a>
                     <a href="#" class="nav-item-borrowed nav-link">Borrowed</a>
                     <hr class="nav-divider">

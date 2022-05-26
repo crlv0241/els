@@ -5,6 +5,8 @@
     }
 
 
+    $user = $_SESSION['user'];
+
     require_once "../../db/connecttion.php";
 ?>
 
@@ -224,7 +226,6 @@
             left: 0;
             width: 88px;
             height: 88px;
-            background-image: url("https://www.freeiconspng.com/uploads/open-book-icon-free-books-and-education-13.png");
             background-size: cover;
             opacity: 0.2;
             border-radius: 8px;
@@ -233,17 +234,15 @@
         .price-card:after {
             position: absolute;
             content: "";
-            top: 30px;
-            right: 35px;
-            width: 88px;
-            height: 88px;
+            top: 0;
+            right: 20px;
+            width: 40px;
+            height: 100px;
             opacity: 0.2;
-            border-radius: 8px;
-            transform: rotate(45deg);
             background-size: cover;
 
-            background-image: url("https://www.freeiconspng.com/uploads/open-book-icon-free-books-and-education-13.png");
-
+            background-image: url("https://www.kindpng.com/picc/m/54-546989_bookmark-background-png-transparent-bookmark-clipart-png-png.png");
+            
 
         }
         .price-card h2 {
@@ -266,10 +265,10 @@
             border: 1px solid #ebebeb;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
-        .price-card .btn:hover {
+        /* .price-card .btn:hover {
             background: #0cc652;
             border-color: #0cc652;
-        }
+        } */
         p.price span {
             display: inline-block;
             padding: 45px 15px 50px;
@@ -324,25 +323,35 @@
         <section class="container-wave"  style="display:flex ; align-items:flex-end">
             <div class="container" style="display:flex ; align-items:flex-end">
 
-                <h2 class="h1" style="color:white; z-index:20">General Mariano Alvarez Technical High School Library</h2>
+                <h2 class="h1" style="color:white; z-index:20"><i class="fa-solid fa-bookmark me-3"></i>Your Bookmarks</h2>
             </div>
             <div class="wave" style="display:flex; align-items:flex-end">
             </div>  
         </section>
 
         <?php 
-            $stm = $PDO -> prepare("SELECT * FROM tbl_items");
+            $user_id =  (int) $user['id'];
+            $stm = $PDO -> prepare("SELECT *
+                                    FROM 
+                                        tbl_bookmarks
+                                    INNER JOIN 
+                                        tbl_items 
+                                    ON 
+                                        tbl_bookmarks.item_id = tbl_items.id 
+                                    WHERE
+                                        tbl_bookmarks.user_id = $user_id;");
+
             $stm -> execute();
             $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
         ?>
 
         <div class="container">
-        <div class="col-lg-6">
+        <!-- <div class="col-lg-6">
             <div class="input-group mt-3 ">
                 <input id="input-search" type="text" class="form-control" placeholder="Search title, author, genre" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2"> <i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
-        </div>
+        </div> -->
 
         <div id="catalog-result" class="mt-4">
             <section class="pricing-section">
@@ -381,7 +390,7 @@
                                 </ul>
 
                                 <a class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
-                                <a onclick="bookmark('<?php echo $i['id'] ?>')" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
+                                <a onclick="removeBookmark('<?php echo $i['id'] ?>')" class="btn btn-danger btn-mid "  ><i class="fa-solid fa-eraser me-2"></i>Remove</a>
                             </div>
                         </div>
                         <?php endforeach; ?>
@@ -457,20 +466,36 @@
             } );
 	    </script>  
 
+        <script>
+            function removeBookmark(id){
+                $.ajax({
+                    url : "../../actions.php",
+                    method : "POST",
+                    data :{
+                        action : "removeBookmarkk",
+                        id : id
+                    },
+                    success : function (){
+                        console.log(response);
+                    }
+                });
+            }
+        </script>
 
         <script>
-            function bookmark(id){
+            function removeBookmark(id){
                 $.ajax({
+                    dataType: "text",
                     method: "POST",
                     url: "../../actions.php",
                     data: {
-                        action: "bookmark",
+                        action: "removeBookmark",
                         id : id
                     },
                     success: function(response){
                         alert(response);
+                        window.location.reload();
                     }
-
                 });
             }
         </script>

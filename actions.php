@@ -1,6 +1,7 @@
 <?php 
     require_once "./db/connecttion.php";
-
+    session_start();
+    $user  = $_SESSION['user'] ?? null;
 
 
     // =======  ADMIN ACTIONS ==========//
@@ -202,7 +203,6 @@
             $res = $stm -> fetch(PDO::FETCH_ASSOC);
 
             if( $res['isActivated'] == 1 ){
-                session_start();
                 $_SESSION['user'] = $res;
 
                 echo "Login Successfully";
@@ -246,5 +246,51 @@
             echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
                 Account is already existing
                 </div>';
+        }
+    }
+
+
+    //USER SEARCH
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user-search" ){
+        $keyword = $_POST['keyword'];
+        $stm = $PDO ->prepare( "SELECT * FROM  tbl_items WHERE title LIKE '%$keyword%' OR author LIKE '%$keyword%' OR genre LIKE '%$keyword%' ");
+        $stm -> execute();
+
+        $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($res);
+    }
+
+    //USER ADDBOOKMARK
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "bookmark" ){
+        $item_id = (int) $_POST['id'];
+        $user_id = (int) $user['id'];
+
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_bookmarks WHERE item_id = $item_id AND user_id = $user_id" );
+        $stm -> execute();
+
+        //check if bookmarked already
+        if ( $stm -> rowCount() == 0 )
+            {
+                //add to bookmark
+                $stm = $PDO -> prepare( "INSERT INTO tbl_bookmarks(item_id , user_id ) VALUES ($item_id ,  $user_id)");
+                $stm -> execute();
+
+                echo "Successfully saved to your bookmarks.";
+            }
+        else 
+            {
+                echo "This book is already in your bookmarks";
+            }
+    }
+
+    //USER REMOVE BOOKMARK
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "removeBookmark" ){
+        $user_id = (int) $user['id'];
+        $item_id = (int) $_POST['id'];
+        
+        $stm = $PDO -> prepare( " DELETE FROM tbl_bookmarks WHERE user_id = $user_id AND item_id = $item_id" );
+        
+        if ($stm -> execute()){
+            echo "Bookmark has been removed succesfully";
         }
     }

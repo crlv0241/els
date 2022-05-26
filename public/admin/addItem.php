@@ -20,8 +20,8 @@
         $genre         = $_POST['genre'] ?? null;
         $edition       = $_POST['edition'] ?? "none";
         $edition_n     = $_POST['edition-number'] ?? 0;
-        $quantity      = $_POST['quantity'] ?? null;
-        $authorCount  = $_POST['authorCount'] ?? null;
+        $quantity      = (int) $_POST['quantity'] ?? null;
+        $authorCount   = $_POST['authorCount'] ?? null;
         $author        = "";
         $description   = $_POST['description'] ?? null;
         $img           = $_POST['img'] ?? null;
@@ -34,7 +34,7 @@
 
         $author = implode("," , $temp);
 
-        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum,	quantity, authorCount,author, description, img";
+        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum, available,	quantity, authorCount,author, description, img, available";
 
         //CHECK IF ALREADY EXISTING
         $stm = $PDO -> prepare("SELECT * FROM tbl_items WHERE (category = ? && title = ? && publisher = ? && date = ? && edition = ? && editionNum = ? && author = ?)");
@@ -46,7 +46,6 @@
         $stm -> bindValue(6, $edition_n);
         $stm -> bindValue(7, $author);
 
-
         $stm -> execute();
 
 
@@ -56,7 +55,7 @@
 
             
             //INSERT INTO TABLE
-            $stm = $PDO -> prepare("INSERT INTO tbl_items($columns) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stm = $PDO -> prepare("INSERT INTO tbl_items($columns) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $stm -> bindValue(1, $category);
             $stm -> bindValue(2, $isbn);
             $stm -> bindValue(3, $title);
@@ -70,6 +69,7 @@
             $stm -> bindValue(11, $author);
             $stm -> bindValue(12, $description);
             $stm -> bindValue(13, $img);
+            $stm -> bindValue(14, $quantity);
             
             $stm -> execute();
         }
