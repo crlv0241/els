@@ -34,7 +34,7 @@
 
         $author = implode("," , $temp);
 
-        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum, available,	quantity, authorCount,author, description, img, available";
+        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum, 	quantity, authorCount,author, description, img, available";
 
         //CHECK IF ALREADY EXISTING
         $stm = $PDO -> prepare("SELECT * FROM tbl_items WHERE (category = ? && title = ? && publisher = ? && date = ? && edition = ? && editionNum = ? && author = ?)");
