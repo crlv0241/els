@@ -309,7 +309,6 @@
                             <a onclick="bookmark("'. $i['id'] . '")" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
                         </div>
                     </div>';
-                
             }
         }
     }
