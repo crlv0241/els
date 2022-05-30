@@ -33,6 +33,7 @@
         $author        = "";
         $description   = $_POST['description'] ?? null;
         $img           = $_POST['img'] ?? null;
+        $call_number           = $_POST['call_number'] ?? null;
 
         $temp = [];
         for($i = 1; $i <= $authorCount; $i++)
@@ -57,6 +58,7 @@
                                         authorCount = ?,
                                         author = ?,
                                         description = ?,
+                                        call_number = ?,
                                         img = ?
                                     WHERE id = $id;
         ");
@@ -73,7 +75,8 @@
         $stm -> bindValue(10, $authorCount);
         $stm -> bindValue(11, $author);
         $stm -> bindValue(12, $description);
-        $stm -> bindValue(13, $img);
+        $stm -> bindValue(13, $call_number);
+        $stm -> bindValue(14, $img);
 
         $stm->execute();
         header("location:dashboard.php");
@@ -175,6 +178,12 @@
                         <label for="">Genre</label>
                         <input id="genre" value="<?php echo $res['genre'] ?>" name="genre" type="text" class="form-control" required>
                     </div>
+
+                    <div class="col-md-4">
+                        <label for="">Call Number</label>
+                        <input id="genre" value="<?php echo $res['call_number'] ?>"  name="call_number" type="text" class="form-control" required>
+                    </div>
+
 
                     <div class="col-md-4 " >
                         <select name="edition" id="select-edition" class="form-select col-2 p-0" style="border: none; max-width:120px; cursor:pointer ">

@@ -61,7 +61,7 @@
 					<thead >
 						<tr>
 						<th  class="border" scope="col">Title</th>
-						<th  class="border" scope="col">Category</th>
+						<th  class="border" scope="col">Call Number</th>
 						<th  class="border" scope="col">Authors</th>
 						<th  class="border" scope="col">Genre</th>
 						<th  class="border" scope="col">QTY</th>
@@ -79,7 +79,7 @@
                     ?>
                         <tr>
                             <td   class="border"><?php echo $row['title'] ?></td>
-                            <td   class="border"><?php echo $row['category'] ?></td>
+                            <td   class="border"><?php echo $row['call_number'] ?></td>
                             <td   class="border"><?php echo $row['author'] ?></td>
                             <td   class="border"><?php echo $row['genre'] ?></td>
                             <td   class="border" ><?php echo $row['quantity'] ?></td>

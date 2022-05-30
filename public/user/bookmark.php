@@ -370,7 +370,8 @@
                                     <li><i class="fa-brands fa-leanpub me-2"></i>Publisher: <?php echo $i['publisher'] ?></li>
                                     <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: <?php echo $i['date'] ?> </li>
                                     <li><i class="fa-solid fa-signature me-2"></i>Genre: <?php echo $i['genre'] ?> </li>
-                             
+                                    <li><i class="fa-solid fa-tag me-2"></i>Call Number: <?php echo $i['call_number'] ?> </li>
+
                                     <li>
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">

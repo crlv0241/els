@@ -30,15 +30,21 @@
                 <span style="font-style:italic; margin-top:12px">'. $res['category'] .'</span>';
                 
                 if( $res['edition'] != "none" )
-                echo '<span style="padding:0 4px; font-style:italic;">' . $res['edition'] . ' ' . $res['editionNum'] . '</span>';         
+                echo '<span style="padding:0 4px; font-style:italic;"><b> ' . $res['edition'] . ' ' . $res['editionNum'] . '<b></span>';         
                 
                 if( $res['isbn'])
-                    echo '<p style=" font-style:italic;">ISBN:'. $res['isbn'] .'</p>';         
-        echo '<p style="font-style:italic;">Author/s: ' . $res['author'] . '</p>';
+                    echo '<p style=" font-style:italic;">ISBN:<b> '. $res['isbn'] .'</b></p>';         
+        echo '<p style="font-style:italic;">Author/s: <b>' . $res['author'] . '</b></p>';
 
         if($res['date'] != 0){
-            echo '<p style="font-style:italic;">Published on ' .  $res['date'] . '</p>';
+            echo '<p style="font-style:italic;">Published on <b>'.  $res['date'] . '</b></p>';
         }
+
+        
+        if($res['call_number'] != ''){
+            echo '<p style="font-style:italic; ">Call Number: <b> ' .  $res['call_number'] . '</b></p>';
+        }
+
         
         
         if ($res['description']  != null){
@@ -140,6 +146,15 @@
 
         echo "Account was succesfully activated";
         
+    }
+
+    //REJECT ACCOUNT
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "rejectAccount"){
+        $id = (int) $_POST['id'];
+        
+        $stm = $PDO -> prepare( "DELETE FROM tbl_pending_account WHERE id = $id" );
+        $stm -> execute();
+        echo $id;
     }
 
 
@@ -252,12 +267,51 @@
 
     //USER SEARCH
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user-search" ){
+
         $keyword = $_POST['keyword'];
         $stm = $PDO ->prepare( "SELECT * FROM  tbl_items WHERE title LIKE '%$keyword%' OR author LIKE '%$keyword%' OR genre LIKE '%$keyword%' ");
         $stm -> execute();
 
         $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($res);
+        if( count($res) > 0 ) {
+            foreach ($res as $i){
+                echo '<div class="col-12 mt-4">
+                        <div class="price-card ">
+                            <h2>' . $i['title']. '</h2>
+                            <p class="fst-italic">' . $i['category'];  if( $i['edition']  != 'none' ) echo $i['edition'] . ' ' . $i['editionNum'] . '</p>
+                            <p>Status:'; if($i['available'] > 0){ echo '<span class="badge rounded-pill bg-success">Available</span>'; } else { echo '<span class="badge rounded-pill bg-danger">Not Available</span>';} echo '</p>
+                            <ul class="pricing-offers mt-2">
+                                <li><i class="fa-solid fa-feather-pointed me-2"></i>Author:. '. $i['author'] . '</li>
+                                <li><i class="fa-brands fa-leanpub me-2"></i>Publisher: ' . $i['publisher'] . ' </li>
+                                <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: ' .  $i['date'] . ' </li>
+                                <li><i class="fa-solid fa-signature me-2"></i>Genre: ' . $i['genre'] . ' </li>
+                                <li><i class="fa-solid fa-tag me-2"></i>Call Number: ' . $i['call_number'] . ' </li>
+                        
+                                <li>
+                                <div class="accordion" id="accordionExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne'. $i['id'] .'" >
+                                            Description
+                                        </button>
+                                        </h2>
+                                        <div id="collapseOne' . $i['id'] .'" class="accordion-collapse collapsed collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            '.$i['description'] .'
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>      
+                                </li>
+                            </ul>
+
+                            <a class="btn btn-primary btn-mid mx-2 '; if($i['available'] == 0) echo "disabled"; echo '"  >Request</a>
+                            <a onclick="bookmark("'. $i['id'] . '")" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
+                        </div>
+                    </div>';
+                
+            }
+        }
     }
 
     //USER ADDBOOKMARK

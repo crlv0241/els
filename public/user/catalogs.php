@@ -361,6 +361,7 @@
                                     <li><i class="fa-brands fa-leanpub me-2"></i>Publisher: <?php echo $i['publisher'] ?></li>
                                     <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: <?php echo $i['date'] ?> </li>
                                     <li><i class="fa-solid fa-signature me-2"></i>Genre: <?php echo $i['genre'] ?> </li>
+                                    <li><i class="fa-solid fa-tag me-2"></i>Call Number: <?php echo $i['call_number'] ?> </li>
                              
                                     <li>
                                     <div class="accordion" id="accordionExample">
@@ -400,58 +401,10 @@
                 $.ajax({
                     url:      "../../actions.php",
                     method:   "POST",
-                    dataType: "json",
+                    dataType: "html",
                     data:  {action: "user-search", keyword: data},
                     success : function(response){
-                        console.log(response);
-
-                        let res = JSON.parse(JSON.stringify(response));
-                        console.log(response.length);
-                        document.getElementById("row-results").innerHTML =``;
-                        if(response.length > 0)
-                        {
-                            res.forEach( i => {
-                                console.log(i);
-                                document.getElementById("row-results").innerHTML += `
-                                <div class="col-12 mt-4">
-                            <div class="price-card ">
-                                <h2>${i.title}</h2>
-                                <p>${i.category}</p>
-                                <ul class="pricing-offers">
-                                    <li>Author:${i.author}</li>
-                                    <li>Publisher:${i.publisher}</li>
-                                    <li>Publication Year: ${i.date} </li>
-            
-                                    <li>
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne${i.id}" >
-                                                Description
-                                            </button>
-                                            </h2>
-                                            <div id="collapseOne${i.id}" class="accordion-collapse collapsed collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                ${i.description}
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>      
-                                    </li>
-                                </ul>
-                                <a href="#" class="btn btn-primary btn-mid">Request</a>
-                            </div>
-                            </div>
-                                `;
-                            } );
-                        }
-                        else
-                        {
-                            document.getElementById("row-results").innerHTML =`<h1 class="h4 text-center">No result</h1>`;
-                        }
-
-
-
+                        document.getElementById("row-results").innerHTML = response;
                     }
                 });
             } );

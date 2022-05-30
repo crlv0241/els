@@ -35,7 +35,9 @@
            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />  
            <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
            <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>             -->
-    
+    <script>
+        let rejectId;
+    </script>
 </head>
 <body>
     <header>
@@ -69,7 +71,7 @@
                         $stm -> execute();
                         while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                     ?>
-                        <tr>
+                        <tr id="tr<?php echo $row['id'] ?>">
                             <td   class="border"><?php echo $row['sid'] ?>      </td>
                             <td   class="border"><?php echo $row['name'] ?>     </td>
                             <td   class="border"><?php echo $row['email'] ?>    </td>
@@ -77,7 +79,7 @@
                             <td   class="border" style="width: 100px;" >
                                 <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
                                     <button class="btn btn-outline-success" onclick="approveAccount(`<?php echo $row['sid']?>`)" ><i class="fa-solid fa-user-check"></i></i> Activate </button>
-                                    <button class="btn btn-outline-danger" > <i class="fa-solid fa-user-xmark"></i> Decline </button>
+                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  onclick="rejectAccount(`<?php echo $row['sid']?>`)"> <i class="fa-solid fa-user-xmark"></i> Decline </button>
                                 </div>
                             </td>
                         </tr>
@@ -139,6 +141,49 @@
         </div> -->
     </div>
 
+    <!-- MODAL REJECT ACCOUNT -->
+    <div class="modal fade" id="rejectModal" data-bs-backdrop="static">
+        <div class="modal-dialog">
+                <div class="modal-content" style="margin-left:0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Decline account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Reason  of declination</label>
+                        <input type="text" name="reason"  id="reason" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button"   data-bs-dismiss="modal" class="btn btn-danger">Reject Account</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- REJECT ACCOUNT -->
+    <script>
+        let rejectModal = document.getElementById('rejectModal');
+        
+        // <!-- LISTENER ON MODAL  -->
+        rejectModal.addEventListener('hide.bs.modal',function(){
+            console.log(rejectId);
+            $.ajax({
+                method: "POST",
+                url: "../../actions.php",
+                dataType: "text",
+                data: {
+                    action: "rejectAccount",
+                    id : rejectId,
+                },
+
+                success: function(response){
+                    window.location.reload();
+                }
+            });
+        })
+    </script>
+
     <script>
 
         function clearHtml(classname){
@@ -171,6 +216,7 @@
         });
     </script>
 
+    <!-- ARPPOVED ACCOUNT -->
     <script>
         function approveAccount(lrn){
             $.ajax({
@@ -192,6 +238,9 @@
         }
     </script>
 
+
+
+    <!-- ZOOM IN ON IMAGE -->
     <script>
         function zoomin(src){
             document.getElementById("img-prev").innerHTML = `
@@ -208,6 +257,8 @@
         }
     </script>
 
+
+    <!-- NAV -->
 	<script>  
 		$(document).ready(function(){  
             

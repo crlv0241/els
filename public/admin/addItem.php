@@ -23,6 +23,7 @@
         $quantity      = (int) $_POST['quantity'] ?? null;
         $authorCount   = $_POST['authorCount'] ?? null;
         $author        = "";
+        $call_number   = $_POST['call_number'] ?? null;
         $description   = $_POST['description'] ?? null;
         $img           = $_POST['img'] ?? null;
 
@@ -34,7 +35,7 @@
 
         $author = implode("," , $temp);
 
-        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum, 	quantity, authorCount,author, description, img, available";
+        $columns = "category, isbn, title, publisher, date, genre, edition, editionNum,	quantity, authorCount,author, description, call_number, img, available";
 
         //CHECK IF ALREADY EXISTING
         $stm = $PDO -> prepare("SELECT * FROM tbl_items WHERE (category = ? && title = ? && publisher = ? && date = ? && edition = ? && editionNum = ? && author = ?)");
@@ -55,7 +56,7 @@
 
             
             //INSERT INTO TABLE
-            $stm = $PDO -> prepare("INSERT INTO tbl_items($columns) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stm = $PDO -> prepare("INSERT INTO tbl_items($columns) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $stm -> bindValue(1, $category);
             $stm -> bindValue(2, $isbn);
             $stm -> bindValue(3, $title);
@@ -68,8 +69,9 @@
             $stm -> bindValue(10, $authorCount);
             $stm -> bindValue(11, $author);
             $stm -> bindValue(12, $description);
-            $stm -> bindValue(13, $img);
-            $stm -> bindValue(14, $quantity);
+            $stm -> bindValue(13, $call_number);
+            $stm -> bindValue(14, $img);
+            $stm -> bindValue(15, $quantity);
             
             $stm -> execute();
         }
@@ -218,6 +220,11 @@
                     <div class="col-md-4">
                         <label for="">Genre</label>
                         <input id="genre" name="genre" type="text" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="">Call Number</label>
+                        <input id="genre" name="call_number" type="text" class="form-control" required>
                     </div>
 
                     <div class="col-md-4 " >
