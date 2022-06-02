@@ -48,30 +48,68 @@
         </div>
         <div class="user signupBx">
           <div class="formBx">
-            <form id="signup" method="POST"  enctype="multipart/form-data">
-              <h2>Create an account</h2>
-              <div id="div-info"></div>
-              <input type="hidden" name="action" value="btn-signup">
-              <input type="text" name="sid" placeholder="Learner Reference Number" required />
-              <input type="text" name="name" placeholder="Full Name" required/>
-              <input type="email" name="email" placeholder="Email" required/>
-              <input type="password" class="pr-password" name="password" placeholder="Create Password" required/>
-            <div class="mb-3">
-                School ID
-                <input class="form-control" name="imgid" accept="image/*"  type="file" id="formFile" required>
-            </div>
 
-              <input type="submit"  value="Sign Up" />
+            <form id="signup" method="POST"  enctype="multipart/form-data" autocomplete="off">
+              <h2>Create an account</h2>
+              <div id="div-info" ></div>
+
+              <select required id="accountType" name="accountType" class="form-control">
+                <option value=""> -- Select Account Type</option>
+                <option value="Student"> Student</option>
+                <option value="Personnel"> School Personnel</option>
+              </select>
+              
+              <div id="form-inputs" >
+
+              </div>
               <p class="signup">
-                Already have an account ?
-                <a href="#" onclick="toggleForm();">Sign in.</a>
-              </p>
+                  Already have an account ?
+                  <a href="#" onclick="toggleForm();">Sign in.</a>
+                </p>
             </form>
           </div>
           <div class="imgBx"><img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" /></div>
         </div>
       </div>
     </section>
+
+    <script>  
+    let accountType  =  document.getElementById('accountType');
+    accountType.onchange = function (){
+      if(this.value  == "Student"){
+        document.getElementById("form-inputs").innerHTML = `<input type="hidden" name="action" value="btn-signup">
+                <input type="text" name="sid" placeholder="Learner Reference Number" required />
+                <input type="text" name="name" placeholder="Full Name" required/>
+                <input type="email" autofill="false" name="email" placeholder="Email" required/>
+                <input type="password" class="pr-password" name="password" placeholder="Create Password" required/>
+                <div class="mb-3">
+                    School ID
+                    <input class="form-control" name="imgid" accept="image/*"  type="file" id="formFile" required>
+                </div>
+
+                <input type="submit"  value="Sign Up" />
+               `;
+      } 
+      else if (this.value == "Personnel"){
+        document.getElementById("form-inputs").innerHTML = `<input type="hidden" name="action" value="btn-signup">
+                <input type="text" name="sid" placeholder="Employee Number" required />
+                <input type="text" name="name" placeholder="Full Name" required/>
+                <input type="email" name="email" placeholder="Email" required/>
+                <input type="password" class="pr-password" name="password" placeholder="Create Password" required/>
+                <div class="mb-3">
+                    School ID
+                    <input class="form-control" name="imgid" accept="image/*"  type="file" id="formFile" required>
+                </div>
+
+                <input type="submit"  value="Sign Up" />
+               `;
+      }
+      else {
+        document.getElementById("form-inputs").innerHTML = ``;
+      }
+    }
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="../../js/jquery.passwordRequirements.min.js"></script>
     <script>
@@ -96,24 +134,10 @@
                 processData: false,  // Important!
                 contentType: false,
                 cache: false,
-                dataType: "text",
+                dataType: "html",
                 success: function (data){
-                    console.log(data);
                     
-                    if(data == "1"){
-                        document.getElementById("div-info").innerHTML = `
-                        <div class="alert text-center alert-success alert-dismissible fade show" role="alert">
-                            Account created succesfully, admin will review your details.
-                        </div>
-                        `;
-                    } else {
-                        document.getElementById("div-info").innerHTML = `
-                        <div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
-                            LRN is already registered.
-                        </div>
-                        `;
-                    }
-
+                    document.getElementById("div-info").innerHTML = data; 
                     document.getElementById("signup").reset();
 
                 }

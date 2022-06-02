@@ -29,8 +29,8 @@ table.dataTable thead .sorting:after {
 }
 
 table.dataTable thead th{
-    background-color: var(--maroon);
-    color: white !important;
+    background-color: #EDE4E3;
+    color: black !important;
     padding: 4px 12px !important;
 }
 

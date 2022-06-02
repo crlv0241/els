@@ -49,7 +49,7 @@
         <div class="dashboard">
 		
             <section class="books-table" style="height:calc(100vh - 140px)">
-                <h1 style="background-color: var(--maroon); padding:.5rem;text-align:center; color:white">Active Accounts</h1>
+                <h1 style="background-color: var(--second); font-weight:bold; padding:.5rem;text-align:center; color:black">Active Accounts</h1>
                     <a href="addAccount.php" class="btn btn-outline-success my-2" style="border:none"> <i class="fa-solid fa-user-plus"></i> Add Account</a>
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
@@ -63,12 +63,12 @@
 
                     <!-- GET THE BOOKS  -->
                     <?php 
-                        $stm = $PDO -> prepare("SELECT * FROM tbl_accounts");
+                        $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE isActivated = 1");
                         $stm -> execute();
                         while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr>
-                            <td   class="border"><?php echo $row['lrn'] ?></td>
+                            <td   class="border"><?php echo $row['sid'] ?></td>
                             <td   class="border"><?php echo $row['name'] ?></td>
                             <td   class="border"><?php echo $row['email'] ?></td>
                         </tr>

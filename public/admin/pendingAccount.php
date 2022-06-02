@@ -56,9 +56,10 @@
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
 						<tr>
-                            <th  class="border" scope="col">LRN</th>
+                            <th  class="border" scope="col">LRN / Emp ID</th>
                             <th  class="border" scope="col">Name</th>
                             <th  class="border" scope="col">Email</th>
+                            <th  class="border" scope="col">Account Type</th>
                             <th  class="border" scope="col">Image Proof</th>
                             <th  class="border" scope="col">Actions</th>
 						</tr>
@@ -75,11 +76,12 @@
                             <td   class="border"><?php echo $row['sid'] ?>      </td>
                             <td   class="border"><?php echo $row['name'] ?>     </td>
                             <td   class="border"><?php echo $row['email'] ?>    </td>
+                            <td   class="border"><?php echo $row['account_type'] ?>   </td>
                             <td   class="border"> <img style="cursor:zoom-in" width="100" class="fullscreen" onClick="zoomin(`../../<?php echo $row['imgid'] ?>`)" src="../../<?php echo $row['imgid'] ?>" alt="">   </td>
                             <td   class="border" style="width: 100px;" >
                                 <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
                                     <button class="btn btn-outline-success" onclick="approveAccount(`<?php echo $row['sid']?>`)" ><i class="fa-solid fa-user-check"></i></i> Activate </button>
-                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  onclick="rejectAccount(`<?php echo $row['sid']?>`)"> <i class="fa-solid fa-user-xmark"></i> Decline </button>
+                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  > <i class="fa-solid fa-user-xmark"></i> Decline </button>
                                 </div>
                             </td>
                         </tr>
@@ -155,7 +157,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button"   data-bs-dismiss="modal" class="btn btn-danger">Reject Account</button>
+                        <button type="button" id="btn-reject"    data-bs-dismiss="modal" class="btn btn-danger">Reject Account</button>
                     </div>
                 </div>
         </div>
@@ -163,10 +165,10 @@
 
     <!-- REJECT ACCOUNT -->
     <script>
-        let rejectModal = document.getElementById('rejectModal');
+        let rejectModal = document.getElementById('btn-reject');
         
         // <!-- LISTENER ON MODAL  -->
-        rejectModal.addEventListener('hide.bs.modal',function(){
+        rejectModal.addEventListener('click',function(){
             console.log(rejectId);
             $.ajax({
                 method: "POST",

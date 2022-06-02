@@ -1,11 +1,36 @@
 <?php
+    require_once "../../db/connecttion.php";
     session_start();
+
     if( ! isset($_SESSION['user']) ){
         header("location:index.php");
     }
 
+    $user = $_SESSION['user'];
+    $sid = $user['sid'];
 
-    require_once "../../db/connecttion.php";
+    if( $user['account_type'] == "Student" ){
+        $col = "lrn";
+        $table = "tbl_students";
+        $_SESSION['account_type'] = "Student";
+    }
+    else if( $user['account_type'] == "Personnel"){
+        $_SESSION['account_type'] = "Personnel";
+        $col = "employee_id";
+        $table = "tbl_personnels";
+    }
+
+    $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+    $stm -> execute();
+
+    $user = $stm -> fetch(PDO::FETCH_ASSOC);
+
+
+    if($_SESSION['account_type'] && ( $user['phone'] == '' || $user['grade_section'] == "" || $user['adviser'] == '' ) ){
+        $_SESSION['profile_warning'] = "Good day " .$user['name']  . ", you need to complete your profile information in order to use this website. Please complete your informations below.";
+        header("location: profile.php");
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +50,7 @@
         .container-wave {
         position: relative;
         background: #2c3e50;
-        height: 15vh;
+        height: auto;
         }
 
         .wave {
@@ -324,7 +349,7 @@
         <section class="container-wave"  style="display:flex ; align-items:flex-end">
             <div class="container" style="display:flex ; align-items:flex-end">
 
-                <h2 class="h1" style="color:white; z-index:20">General Mariano Alvarez Technical High School Library</h2>
+                <h2 class="h1 py-2" style="color:white; z-index:20">General Mariano Alvarez Technical High School Library</h2>
             </div>
             <div class="wave" style="display:flex; align-items:flex-end">
             </div>  

@@ -54,14 +54,14 @@
                 <form class="form-control shadow" id="signup" method="POST" >
                     <h2>User Information</h2>
                     <div id="div-info"></div>
-                    
-                    <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
-                    <input class="form-control mt-2" type="text" name="sid" placeholder="Learner Reference Number" required />
-                    <input class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
-                    <input class="form-control mt-2" type="email" name="email" placeholder="Email" required/>
-                    <input type="password" class="pr-password form-control mt-2" name="password" placeholder="Temporary password" required/>
+                    <select class="form-control" name="accountType" id="accountType">
+                        <option value="">-- Select account type</option>
+                        <option value="Student">Student</option>
+                        <option value="Personnel">Personnel</option>
+                    </select>
 
-                    <input class="btn btn-primary mt-4" style="background-color: var(--maroon) ;" type="submit"  value="Add account" />
+                    <div id="form-inputs">
+                    </div>
                 </form>
                 
             </div>
@@ -74,6 +74,38 @@
             $('#'+classname + ' .shadow').fadeOut("fast");
         }
     </script>
+
+    <!-- toggle placeholder account type -->
+    <script>
+        document.getElementById("accountType").addEventListener('change', function(){
+            if(this.value == "Student"){
+                document.getElementById("form-inputs").innerHTML = `
+                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
+                        <input id="sid" class="form-control mt-2" type="text" name="sid" placeholder="Learner Reference Number" required />
+                        <input class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
+                        <input class="form-control mt-2" type="email" name="email" placeholder="Email" required/>
+                        <input type="password" class="pr-password form-control mt-2" name="password" placeholder="Temporary password" required/>
+                        
+                        <input class="btn btn-primary mt-4" style="background-color: var(--maroon) ;" type="submit"  value="Add account" />
+                `;
+            }
+            else if(this.value == "Personnel" ){
+                document.getElementById("form-inputs").innerHTML = `
+                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
+                        <input id="sid" class="form-control mt-2" type="text" name="sid" placeholder="Employee Number" required />
+                        <input class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
+                        <input class="form-control mt-2" type="email" name="email" placeholder="Email" required/>
+                        <input type="password" class="pr-password form-control mt-2" name="password" placeholder="Temporary password" required/>
+                        
+                        <input class="btn btn-primary mt-4" style="background-color: var(--maroon) ;" type="submit"  value="Add account" />
+                `;
+            }
+            else {
+                document.getElementById("form-inputs").innerHTML = ``;
+            }
+        })
+    </script>
+
 
     <script>
         $( "#nav-toggler" ).click(function() {

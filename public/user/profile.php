@@ -1,13 +1,32 @@
 <?php
+    require_once "../../db/connecttion.php";
+
     session_start();
     if( ! isset($_SESSION['user']) ){
         header("location:index.php");
     }
 
-
     $user = $_SESSION['user'];
+    $sid = $user['sid'];
 
-    require_once "../../db/connecttion.php";
+    if( $user['account_type'] == "Student" ){
+        $col = "lrn";
+        $table = "tbl_students";
+        $_SESSION['account_type'] = "Student";
+    }
+    else if( $user['account_type'] == "Personnel"){
+        $_SESSION['account_type'] = "Personnel";
+        $col = "employee_id";
+        $table = "tbl_personnels";
+    }
+
+
+    
+    $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+    $stm -> execute();
+
+    $user = $stm -> fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -322,28 +341,13 @@
         <?php require_once "./components/nav.php" ?>    
         <section class="container-wave"  style="display:flex ; align-items:flex-end">
             <div class="container" style="display:flex ; align-items:flex-end">
-
-                <h2 class="h1 py-2" style="color:white; z-index:20"><i class="fa-solid fa-bookmark me-3"></i>Your Bookmarks</h2>
+                <h2 class="h1 py-2" style="color:white; z-index:20"><i class="fa-solid fa-user-pen me-3"></i>Profile</h2>
             </div>
             <div class="wave" style="display:flex; align-items:flex-end">
             </div>  
         </section>
 
-        <?php 
-            $user_id =  (int) $user['id'];
-            $stm = $PDO -> prepare("SELECT *
-                                    FROM 
-                                        tbl_bookmarks
-                                    INNER JOIN 
-                                        tbl_items 
-                                    ON 
-                                        tbl_bookmarks.item_id = tbl_items.id 
-                                    WHERE
-                                        tbl_bookmarks.user_id = $user_id;");
-
-            $stm -> execute();
-            $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
-        ?>
+     
 
         <div class="container">
         <!-- <div class="col-lg-6">
@@ -352,154 +356,83 @@
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2"> <i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div> -->
-
-        <div id="catalog-result" class="mt-4">
-            <section class="pricing-section">
-                <div class="container">
-                    <!-- RESULTS  -->
-                    <div id="row-results" class="row">
-                    <?php foreach($res as $i): ?>
-
-                        <div class="col-12 mt-4">
-                            <div class="price-card ">
-                                <h2><?php echo $i['title'] ?></h2>
-                                <p class="fst-italic"><?php echo $i['category'] ?>  <?php  if( $i['edition']  != 'none' ) echo $i['edition'] . ' ' . $i['editionNum'] ?></p>
-                                <p>Status: <?php if($i['available'] > 0){ echo '<span class="badge rounded-pill bg-success">Available</span>'; } else { echo '<span class="badge rounded-pill bg-danger">Not Available</span>'; }  ?></p>
-                                <ul class="pricing-offers mt-2">
-                                    <li><i class="fa-solid fa-feather-pointed me-2"></i>Author: <?php echo $i['author'] ?></li>
-                                    <li><i class="fa-brands fa-leanpub me-2"></i>Publisher: <?php echo $i['publisher'] ?></li>
-                                    <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: <?php echo $i['date'] ?> </li>
-                                    <li><i class="fa-solid fa-signature me-2"></i>Genre: <?php echo $i['genre'] ?> </li>
-                                    <li><i class="fa-solid fa-tag me-2"></i>Call Number: <?php echo $i['call_number'] ?> </li>
-
-                                    <li>
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $i['id'] ?>" >
-                                                Description
-                                            </button>
-                                            </h2>
-                                            <div id="collapseOne<?php echo $i['id'] ?>" class="accordion-collapse collapsed collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <?php echo $i['description'] ?>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>      
-                                    </li>
-                                </ul>
-
-                                <a class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
-                                <a onclick="removeBookmark('<?php echo $i['id'] ?>')" class="btn btn-danger btn-mid "  ><i class="fa-solid fa-eraser me-2"></i>Remove</a>
+        
+        <div class="container-xl px-4 mt-4">
+                <?php if ( isset($_SESSION['profile_warning']) ): ?>
+                <div style="color:white; background-color:#FAC213; padding: .2rem;border-radius:4px; text-align:center" >
+                <i class="fa-solid fa-triangle-exclamation"></i> <?php echo $_SESSION['profile_warning'] ?>
+                </div>
+                <?php endif; ?>
+                <hr class="mt-0 mb-4">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <!-- Profile picture card-->
+                        <div class="card mb-4 mb-xl-0">
+                            <div class="card-header">Profile Picture</div>
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                <!-- Profile picture upload button-->
+                                <button class="btn btn-primary" type="button">Upload new image</button>
                             </div>
                         </div>
-                        <?php endforeach; ?>
+                    </div>
+                    <div class="col-xl-8">
+                        <!-- Account details card-->
+                        <div class="card mb-4">
+                            <div class="card-header">Account Details</div>
+                            <div class="card-body">
+                                <form>
+                                    <!-- Form Group (LRN)-->
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputUsername">Learner Reference Number:</label>
+                                        <input class="form-control"  type="text" placeholder="Enter your username" value="<?php echo $user['lrn'] ?>"  readonly>
+                                    </div>
+                                    <!-- Form Row-->
+                                        <!-- Form Group (first name)-->
+                                    <div class="col-md-12">
+                                        <label class="small mb-1" >Full name</label>
+                                        <input class="form-control"  type="text" placeholder="Enter your first name" value="<?php echo $user['name'] ?>" readonly>
+                                    </div>
+                                
+                                    <!-- Form Group (email address)-->
+                                    <div class="mb-3">
+                                        <label class="small mb-1" >Email address</label>
+                                        <input class="form-control" name="email" type="email" placeholder="Enter your email address" value="<?php echo $user['email']?>">
+                                    </div>
+
+                                    <!-- Form Row        -->
+                                    <div class="row gx-3 mb-3">
+                                        <!-- Form Group (Grade And Section)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" >Grade and Section</label>
+                                            <input class="form-control" name="grade_section" type="text" placeholder="Ex: Grade 9 Aristotle" value="<?php echo $user['grade_section'] ?>" required >
+                                        </div>
+                                        <!-- Form Group (Phone)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputPhone">Phone number</label>
+                                            <input class="form-control" id="inputPhone" type="tel" placeholder="Ex: 09123456778" value="<?php echo $user['phone'] ?>" >
+                                        </div>
+                                    </div>
+                         
+                                
+                                    <!-- Save changes button-->
+                                    <button class="btn btn-primary" type="button">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
 
         </div>
 
-        <script>  
-            $("#input-search").keyup( function(){
-                let data = document.getElementById("input-search").value;
-                console.log(data);
-
-                $.ajax({
-                    url:      "../../actions.php",
-                    method:   "POST",
-                    dataType: "json",
-                    data:  {action: "user-search", keyword: data},
-                    success : function(response){
-                        console.log(response);
-
-                        let res = JSON.parse(JSON.stringify(response));
-                        console.log(response.length);
-                        document.getElementById("row-results").innerHTML =``;
-                        if(response.length > 0)
-                        {
-                            res.forEach( i => {
-                                console.log(i);
-                                document.getElementById("row-results").innerHTML += `
-                                <div class="col-12 mt-4">
-                            <div class="price-card ">
-                                <h2>${i.title}</h2>
-                                <p>${i.category}</p>
-                                <ul class="pricing-offers">
-                                    <li>Author:${i.author}</li>
-                                    <li>Publisher:${i.publisher}</li>
-                                    <li>Publication Year: ${i.date} </li>
-            
-                                    <li>
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne${i.id}" >
-                                                Description
-                                            </button>
-                                            </h2>
-                                            <div id="collapseOne${i.id}" class="accordion-collapse collapsed collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                ${i.description}
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>      
-                                    </li>
-                                </ul>
-                                <a href="#" class="btn btn-primary btn-mid">Request</a>
-                            </div>
-                            </div>
-                                `;
-                            } );
-                        }
-                        else
-                        {
-                            document.getElementById("row-results").innerHTML =`<h1 class="h4 text-center">No result</h1>`;
-                        }
 
 
 
-                    }
-                });
-            } );
-	    </script>  
-
-        <script>
-            function removeBookmark(id){
-                $.ajax({
-                    url : "../../actions.php",
-                    method : "POST",
-                    data :{
-                        action : "removeBookmarkk",
-                        id : id
-                    },
-                    success : function (){
-                        console.log(response);
-                    }
-                });
-            }
-        </script>
-
-        <script>
-            function removeBookmark(id){
-                $.ajax({
-                    dataType: "text",
-                    method: "POST",
-                    url: "../../actions.php",
-                    data: {
-                        action: "removeBookmark",
-                        id : id
-                    },
-                    success: function(response){
-                        alert(response);
-                        window.location.reload();
-                    }
-                });
-            }
-        </script>
+ 
 </body>
 
 </html>

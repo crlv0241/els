@@ -14,8 +14,8 @@
                     <a href="#" class="nav-item-reservations nav-link">Reservations</a>
                     <a href="#" class="nav-item-borrowed nav-link">Borrowed</a>
                     <hr class="nav-divider">
-                    <a class="nav-item-borrowed nav-link" href="#">Setting</a>
-                    <a  class="nav-item-borrowed nav-link" href="#">Sign out <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                    <a class="nav-item-borrowed nav-link" href="profile.php">Account</a>
+                    <a  class="nav-item-borrowed nav-link" href="./logout.php">Sign out <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                 </div>
             </div>
         </div>

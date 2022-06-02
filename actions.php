@@ -21,7 +21,7 @@
         echo ' <div class="div-info" id="div-info">
         <div class="shadow" style="display:flex; justify-content:center; align-items:center; position: absolute; height:100vh; width:100vw; background-color:rgba(0,0,0,0.5); top:0">
             <div class="catalog-info" style="background-color:white; position:relative ;">    
-                <div style="position:absolute; top:0; left:0; display:flex; width:100%; justify-content:space-between; background-color: var(--maroon);">
+                <div style="position:absolute; top:0; left:0; display:flex; width:100%; justify-content:space-between; background-color: #6C6A61;">
                     <span style="padding: 0 1rem; color: white">Catalog Information </span>
                     <span onclick="clearHtml(`div-info`)" ><i style="padding: 4px; color:white" class="fa-solid fa-xmark"></i></span>
                 </div>
@@ -133,15 +133,21 @@
 
         $res = $stm -> fetch(PDO::FETCH_ASSOC);
         $name = $res['name'];
-        $lrn = $res['sid'];
+        $sid = $res['sid'];
         $email = $res['email'];
+        $account_type = $res['account_type'];
         $password = $res['password'];
 
-        $stm = $PDO -> prepare( "INSERT INTO tbl_accounts(lrn, name , email, password)  VALUE (? , ? , ? , ?) ");
-        $stm -> bindValue( 1 , $lrn);
+        if($account_type == "Student")
+            $table_name = "tbl_students (lrn, name , email)";
+        else if($account_type == "Personnel")
+            $table_name = "tbl_personnels ( employee_id, name , email)";
+
+
+        $stm = $PDO -> prepare( "INSERT INTO $table_name  VALUES (? , ? , ? ) ");
+        $stm -> bindValue( 1 , $sid);
         $stm -> bindValue( 2 , $name);
         $stm -> bindValue( 3 , $email);
-        $stm -> bindValue( 4 , $password);
         $stm ->execute();
 
         echo "Account was succesfully activated";
@@ -157,6 +163,57 @@
         echo $id;
     }
 
+        //CREATE NEW USER IN SYSTEM
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-createUser"){
+        $sid = $_POST['sid'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $account_type = $_POST['accountType'];
+        $psw =  $_POST['password'];
+
+        $stm = $PDO -> prepare("SELECT * from tbl_pending_account WHERE sid = '$sid'");
+        $stm->execute();
+
+        if( $stm->rowCount() == 0 )
+        {
+            $stm = $PDO -> prepare( "INSERT INTO tbl_pending_account (sid, name, email, password, isActivated, account_type) VALUES (?,?,?,?,?,?)");
+            $stm -> bindValue( 1 , $sid );
+            $stm -> bindValue( 2 , $name );
+            $stm -> bindValue( 3 , $email );
+            $stm -> bindValue( 4 , md5( $psw ) );
+            $stm -> bindValue( 5 , 1 );
+            $stm -> bindValue( 6 , $account_type );
+
+            if( $stm->execute()){
+                if($account_type == "Student")
+                    $table_name = "tbl_students (lrn, name , email)";
+                else if($account_type == "Personnel")
+                    $table_name = "tbl_personnels ( employee_id, name , email)";
+            
+        
+                $stm = $PDO -> prepare( "INSERT INTO $table_name  VALUES (? , ? , ? ) ");
+                $stm -> bindValue( 1 , $sid);
+                $stm -> bindValue( 2 , $name);
+                $stm -> bindValue( 3 , $email);
+                
+
+                if ($stm ->execute()){
+                    echo '<div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                    Account was created successfully
+                    </div>';
+                }
+    
+            }
+        }
+
+        else
+        {
+            echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                Account is already existing
+                </div>';
+        }
+    }
+
 
     // ============ USER ACTIONS ============= //
     //SIGN UP
@@ -164,6 +221,7 @@
         $sid = $_POST['sid'];
         $name = $_POST['name'];
         $email = $_POST['email'];
+        $account_type = $_POST['accountType'];
         $psw =  $_POST['password'];
 
         $image = $_FILES['imgid'];
@@ -183,21 +241,25 @@
 
         if( $stm->rowCount() == 0 )
         {
-            $stm = $PDO -> prepare( "INSERT INTO tbl_pending_account (sid, name, email, password, imgid) VALUES (?,?,?,?,?)");
+            $stm = $PDO -> prepare( "INSERT INTO tbl_pending_account (sid, name, email, password,account_type , imgid) VALUES (?,?,?,?,?,?)");
             $stm -> bindValue( 1 , $sid );
             $stm -> bindValue( 2 , $name );
             $stm -> bindValue( 3 , $email );
             $stm -> bindValue( 4 , md5( $psw ) );
-            $stm -> bindValue( 5 , $path . '/' . $imgName );
+            $stm -> bindValue( 5 , $account_type);
+            $stm -> bindValue( 6 , $path . '/' . $imgName );
 
             if( $stm->execute()){
-                echo "1";
+                echo '<div class="alert text-center alert-success alert-dismissible fade show" role="alert">
+                Account created succesfully, admin will review your details.
+            </div>';
             }
         }
-
         else
         {
-            echo "2";
+            echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
+                LRN is already registered.
+            </div>';
         }
     }
 
@@ -231,38 +293,7 @@
         }
     }
 
-    //CREATE NEW USER IN SYSTEM
-    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-createUser"){
-        $sid = $_POST['sid'];
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $psw =  $_POST['password'];
 
-        $stm = $PDO -> prepare("SELECT * from tbl_accounts WHERE lrn = '$sid'");
-        $stm->execute();
-
-        if( $stm->rowCount() == 0 )
-        {
-            $stm = $PDO -> prepare( "INSERT INTO tbl_accounts (lrn, name, email, password) VALUES (?,?,?,?)");
-            $stm -> bindValue( 1 , $sid );
-            $stm -> bindValue( 2 , $name );
-            $stm -> bindValue( 3 , $email );
-            $stm -> bindValue( 4 , md5( $psw ) );
-
-            if( $stm->execute()){
-                echo '<div class="alert text-center alert-success alert-dismissible fade show" role="alert">
-                Account was created successfully
-                </div>';
-            }
-        }
-
-        else
-        {
-            echo '<div class="alert text-center alert-danger alert-dismissible fade show" role="alert">
-                Account is already existing
-                </div>';
-        }
-    }
 
 
     //USER SEARCH

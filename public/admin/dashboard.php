@@ -56,7 +56,7 @@
 			
 
             <section class="books-table" style="height:calc(100vh - 140px)">
-                    <h1 style="background-color: var(--maroon); padding:.5rem;text-align:center; color:white">Catalogs</h1>
+                    <h1 style="background-color: var(--second) ; padding:.5rem;text-align:center; color:black; font-weight:bold">Catalogs</h1>
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
 						<tr>
