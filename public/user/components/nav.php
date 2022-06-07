@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-dark shadow" style="background-color: var(--primary) ;">
         <div class="container" style="display: flex; justify-content:space-between;" >
             <a style="text-decoration: none; color: white" >
@@ -11,7 +12,7 @@
                 <div class="navbar-nav" >
                     <a href="catalogs.php" class="nav-item-catalogs nav-link">Catalogs</a>
                     <a href="bookmark.php" class="nav-item-bookmarks nav-link">Bookmarks</a>
-                    <a href="#" class="nav-item-reservations nav-link">Reservations</a>
+                    <a href="reservations.php" class="nav-item-reservations nav-link">Reservations</a>
                     <a href="#" class="nav-item-borrowed nav-link">Borrowed</a>
                     <hr class="nav-divider">
                     <a class="nav-item-borrowed nav-link" href="profile.php">Account</a>

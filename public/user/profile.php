@@ -20,12 +20,69 @@
         $table = "tbl_personnels";
     }
 
-
-    
     $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
     $stm -> execute();
 
     $user = $stm -> fetch(PDO::FETCH_ASSOC);
+
+    //SAVE AND UPDATE PROFILE    
+    if($_SERVER['REQUEST_METHOD'] == "POST" ){
+        
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+      
+        //update student profile if student
+        if( $_SESSION['account_type'] == "Student" ){
+
+            $adviser = $_POST['adviser'];
+            $grade_section = $_POST['grade_section'];
+    
+
+            $stm = $PDO -> prepare( "UPDATE tbl_students 
+                                    SET email = ?, phone = ? , grade_section = ? , adviser =? 
+                                    WHERE lrn =  ?"  );
+            $stm -> bindValue( 1 ,  $email);
+            $stm -> bindValue( 2 ,  $phone);
+            $stm -> bindValue( 3 ,  $grade_section);
+            $stm -> bindValue( 4 ,  $adviser);
+            $stm -> bindValue( 5 ,  $user['lrn']);
+            $stm -> execute();
+
+            $_SESSION['message'] = "Account was updated successfully ";
+            unset( $_SESSION['profile_warning'] );
+
+            
+            $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+            $stm -> execute();
+
+            $user = $stm -> fetch(PDO::FETCH_ASSOC);
+        } 
+        
+        //update personnel profile
+        else if ( $_SESSION['account_type'] == "Personnel" ){
+
+            $designation = $_POST['designation'];
+
+            $stm = $PDO -> prepare( "UPDATE tbl_personnels 
+                                    SET email = ?, phone = ? , designation = ? 
+                                    WHERE employee_id =  ?"  );
+
+            $stm -> bindValue( 1 ,  $email);
+            $stm -> bindValue( 2 ,  $phone);
+            $stm -> bindValue( 3 ,  $designation);
+            $stm -> bindValue( 4 ,  $user['employee_id']);
+            $stm -> execute();
+            unset( $_SESSION['profile_warning'] );
+
+            $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+            $stm -> execute();
+
+            $user = $stm -> fetch(PDO::FETCH_ASSOC);
+        }
+    }
+
+    
+
 
 ?>
 
@@ -365,62 +422,105 @@
                 <?php endif; ?>
                 <hr class="mt-0 mb-4">
                 <div class="row">
-                    <div class="col-xl-4">
-                        <!-- Profile picture card-->
+                    <!-- <div class="col-xl-4">
                         <div class="card mb-4 mb-xl-0">
                             <div class="card-header">Profile Picture</div>
                             <div class="card-body text-center">
-                                <!-- Profile picture image-->
                                 <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                <!-- Profile picture help block-->
                                 <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                                <!-- Profile picture upload button-->
                                 <button class="btn btn-primary" type="button">Upload new image</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-xl-8">
                         <!-- Account details card-->
                         <div class="card mb-4">
                             <div class="card-header">Account Details</div>
                             <div class="card-body">
-                                <form>
-                                    <!-- Form Group (LRN)-->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="inputUsername">Learner Reference Number:</label>
-                                        <input class="form-control"  type="text" placeholder="Enter your username" value="<?php echo $user['lrn'] ?>"  readonly>
-                                    </div>
-                                    <!-- Form Row-->
-                                        <!-- Form Group (first name)-->
-                                    <div class="col-md-12">
-                                        <label class="small mb-1" >Full name</label>
-                                        <input class="form-control"  type="text" placeholder="Enter your first name" value="<?php echo $user['name'] ?>" readonly>
-                                    </div>
-                                
-                                    <!-- Form Group (email address)-->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" >Email address</label>
-                                        <input class="form-control" name="email" type="email" placeholder="Enter your email address" value="<?php echo $user['email']?>">
-                                    </div>
+                                <?php if ( $_SESSION['account_type'] == "Student"){ ?>
+                                    <form method="POST" >
+                                        <!-- Form Group (LRN)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputUsername">Learner Reference Number:</label>
+                                            <input class="form-control"  type="text" placeholder="Enter your username" value="<?php echo $user['lrn'] ?>"  readonly>
+                                        </div>
+                                        <!-- Form Row-->
+                                            <!-- Form Group (first name)-->
+                                        <div class="col-md-12">
+                                            <label class="small mb-1" >Full name</label>
+                                            <input class="form-control"  type="text" placeholder="Enter your first name" value="<?php echo $user['name'] ?>" readonly>
+                                        </div>
+                                    
+                                        <!-- Form Group (email address)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" >Email address</label>
+                                            <input class="form-control" name="email" type="email" placeholder="Enter your email address" value="<?php echo $user['email']?>">
+                                        </div>
 
-                                    <!-- Form Row        -->
-                                    <div class="row gx-3 mb-3">
-                                        <!-- Form Group (Grade And Section)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" >Grade and Section</label>
-                                            <input class="form-control" name="grade_section" type="text" placeholder="Ex: Grade 9 Aristotle" value="<?php echo $user['grade_section'] ?>" required >
+                                        <!-- Form Row        -->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Form Group (Grade And Section)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" >Grade and Section</label>
+                                                <input required class="form-control" name="grade_section" type="text" placeholder="Ex: Grade 9 Aristotle" value="<?php echo $user['grade_section'] ?>" >
+                                            </div>
+                                            <!-- Form Group (Phone)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                                <input required class="form-control" id="phone" name="phone" type="tel" placeholder="Ex: 09123456778" value="<?php echo $user['phone'] ?>" >
+                                            </div>
                                         </div>
-                                        <!-- Form Group (Phone)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputPhone">Phone number</label>
-                                            <input class="form-control" id="inputPhone" type="tel" placeholder="Ex: 09123456778" value="<?php echo $user['phone'] ?>" >
+
+                                        <div class="mb-3">
+                                            <label class="small mb-1" >Adviser</label>
+                                            <input required class="form-control" name="adviser" type="text" placeholder="Ex: Mrs. Ethel Condino" value="<?php echo $user['adviser']?>">
                                         </div>
-                                    </div>
-                         
-                                
-                                    <!-- Save changes button-->
-                                    <button class="btn btn-primary" type="button">Save changes</button>
-                                </form>
+                                    
+                                    
+                                        <!-- Save changes button-->
+                                        <button class="btn btn-primary" type="submit">Save changes</button>
+                                    </form>
+                                <?php } else if( $_SESSION['account_type'] == "Personnel" ){ ?>
+                                    <form method="POST" >
+                                        <!-- Form Group (LRN)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputUsername">Employee Number</label>
+                                            <input class="form-control"  type="text" placeholder="Enter your username" value="<?php echo $user['employee_id'] ?>"  readonly>
+                                        </div>
+                                        <!-- Form Row-->
+                                            <!-- Form Group (first name)-->
+                                        <div class="col-md-12">
+                                            <label class="small mb-1" >Full name</label>
+                                            <input class="form-control"  type="text" placeholder="Enter your first name" value="<?php echo $user['name'] ?>" readonly>
+                                        </div>
+                                    
+                                        <!-- Form Group (email address)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" >Email address</label>
+                                            <input class="form-control" name="email" type="email" placeholder="Enter your email address" value="<?php echo $user['email']?>">
+                                        </div>
+
+                                        <!-- Form Row        -->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Form Group (Grade And Section)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" >Job Title</label>
+                                                <input required class="form-control" name="designation" type="text" placeholder="Ex: Teacher" value="<?php echo $user['designation'] ?>" >
+                                            </div>
+                                            <!-- Form Group (Phone)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                                <input required class="form-control" id="phone" name="phone" type="tel" placeholder="Ex: 09123456778" value="<?php echo $user['phone'] ?>" >
+                                            </div>
+                                        </div>
+
+                                        
+                            
+                                    
+                                        <!-- Save changes button-->
+                                        <button class="btn btn-primary" type="submit">Save changes</button>
+                                    </form>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

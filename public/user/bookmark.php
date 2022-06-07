@@ -360,7 +360,7 @@
                     <div id="row-results" class="row">
                     <?php foreach($res as $i): ?>
 
-                        <div class="col-12 mt-4">
+                        <div class="col-md-5 mt-4">
                             <div class="price-card ">
                                 <h2><?php echo $i['title'] ?></h2>
                                 <p class="fst-italic"><?php echo $i['category'] ?>  <?php  if( $i['edition']  != 'none' ) echo $i['edition'] . ' ' . $i['editionNum'] ?></p>
@@ -394,7 +394,13 @@
                                 <a onclick="removeBookmark('<?php echo $i['id'] ?>')" class="btn btn-danger btn-mid "  ><i class="fa-solid fa-eraser me-2"></i>Remove</a>
                             </div>
                         </div>
+
                         <?php endforeach; ?>
+                            
+                        <?php 
+                            if ( $stm -> rowCount()  == 0 )
+                                echo '<p class="text-center">  Your bookmark is empty </p>';
+                        ?>
                     </div>
                 </div>
             </section>

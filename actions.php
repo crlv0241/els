@@ -30,7 +30,7 @@
                 <span style="font-style:italic; margin-top:12px">'. $res['category'] .'</span>';
                 
                 if( $res['edition'] != "none" )
-                echo '<span style="padding:0 4px; font-style:italic;"><b> ' . $res['edition'] . ' ' . $res['editionNum'] . '<b></span>';         
+                echo '<span style="padding:0 4px; font-style:italic;"><b> ' . $res['edition'] . ' ' . $res['editionNum'] . '</b></span>';         
                 
                 if( $res['isbn'])
                     echo '<p style=" font-style:italic;">ISBN:<b> '. $res['isbn'] .'</b></p>';         

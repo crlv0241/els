@@ -26,7 +26,12 @@
     $user = $stm -> fetch(PDO::FETCH_ASSOC);
 
 
-    if($_SESSION['account_type'] && ( $user['phone'] == '' || $user['grade_section'] == "" || $user['adviser'] == '' ) ){
+    if($_SESSION['account_type'] == "Student" && ( $user['phone'] == '' || $user['grade_section'] == "" || $user['adviser'] == '' ) ){
+        $_SESSION['profile_warning'] = "Good day " .$user['name']  . ", you need to complete your profile information in order to use this website. Please complete your informations below.";
+        header("location: profile.php");
+    }
+
+    if($_SESSION['account_type'] == "Personnel" && ( $user['phone'] == '' || $user['designation'] == "" ) ){
         $_SESSION['profile_warning'] = "Good day " .$user['name']  . ", you need to complete your profile information in order to use this website. Please complete your informations below.";
         header("location: profile.php");
     }
@@ -406,7 +411,7 @@
                                     </li>
                                 </ul>
 
-                                <a class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
+                                <a href="./reserve.php?book_id=<?php echo $i['id']?>" class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
                                 <a onclick="bookmark('<?php echo $i['id'] ?>')" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
                             </div>
                         </div>
