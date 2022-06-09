@@ -214,6 +214,15 @@
         }
     }
 
+    //APPROVE RESERVATION
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "approveReservation"){
+        $reservation_id = $_POST['reservation_id'];
+        $stm = $PDO -> prepare("UPDATE tbl_reservations SET status = 'Approved' WHERE reservation_id = $reservation_id");
+
+        if($stm -> execute())
+            echo "Added new reservation";        
+    }
+
 
     // ============ USER ACTIONS ============= //
     //SIGN UP

@@ -12,7 +12,7 @@
             <span class="nav-name fs-24 ps-3">Add Catalog</span>
         </div>
     </a>
-    <a href="#">
+    <a href="reservations.php">
 
         <div class="nav-item ">
             <i class="fa-solid fa-swatchbook fs-24"></i>

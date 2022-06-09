@@ -123,7 +123,7 @@
         <section class="container-wave"  style="display:flex ; align-items:flex-end">
             <div class="container" style="display:flex ; align-items:flex-end">
 
-                <h2 class="h1 py-2" style="color:white; z-index:20">General Mariano Alvarez Technical High School Library</h2>
+                <h2 class="h1 py-2" style="color:white; z-index:20">Reservations</h2>
             </div>
             <div class="wave" style="display:flex; align-items:flex-end">
             </div>  
@@ -156,6 +156,9 @@
                     </div>
                 
                 <?php endforeach; ?>
+                <?php if($stm -> rowCount() == 0 ): ?>
+                    <p class="text-center"> -- No reservations --</p>
+                <?php endif; ?>
             </div>
 
         </div>
