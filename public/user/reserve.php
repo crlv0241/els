@@ -46,10 +46,9 @@
         $book_id  = $_POST['book_id'];
 
         //check if has pending reservation
-        $stm = $PDO -> prepare(" SELECT * FROM tbl_reservations WHERE borrower_sid = ? AND book_id = ? AND status = ?");
+        $stm = $PDO -> prepare(" SELECT * FROM tbl_reservations WHERE borrower_sid = ? AND book_id = ? AND status IN ('Pending' , 'Approved')");
         $stm -> bindValue( 1 , $sid);
         $stm -> bindValue( 2 , $book_id);
-        $stm -> bindValue( 3 , "Pending");
 
         $stm -> execute();
 
@@ -77,14 +76,14 @@
 
 ?>
 <?php 
-    //check the pending reservation of the user
-    $stm = $PDO -> prepare(" SELECT * FROM tbl_reservations WHERE borrower_sid = ? AND status = ?");
+    //check the pending and approved reservation of the user
+    $stm = $PDO -> prepare(" SELECT * FROM tbl_reservations WHERE borrower_sid = ? AND status IN ('Pending','Approved')");
     $stm -> bindValue( 1 , $sid);
-    $stm -> bindValue( 2 , "Pending");
 
     $stm -> execute();
 
     $pending_reservations = $stm -> rowCount();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -221,7 +220,7 @@
                             <p class="fs-4">Name : <?php echo $user['name']  ?></p>
                             <p class="fs-6">Grade and Section: <?php echo $user['grade_section']?></p>
                             <p class="fs-6">Adviser:  <?php echo $user['adviser'] ?></p>
-                        </div>
+                        </div>  
                 
                         <button type="submit"   class="<?php if($pending_reservations >= 3) echo "disabled" ?> btn btn-outline-success mt-2">Reserve</button>
                         <?php 

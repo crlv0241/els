@@ -1,13 +1,46 @@
 <?php
+    require_once "../../db/connecttion.php";
     session_start();
+
+
     if( ! isset($_SESSION['user']) ){
         header("location:index.php");
     }
 
 
     $user = $_SESSION['user'];
+    $user_id = $user['id'];
 
-    require_once "../../db/connecttion.php";
+    $sid = $user['sid'];
+
+    if( $user['account_type'] == "Student" ){
+        $col = "lrn";
+        $table = "tbl_students";
+        $_SESSION['account_type'] = "Student";
+    }
+    else if( $user['account_type'] == "Personnel"){
+        $_SESSION['account_type'] = "Personnel";
+        $col = "employee_id";
+        $table = "tbl_personnels";
+    }
+
+    $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+    $stm -> execute();
+
+
+    $user = $stm -> fetch(PDO::FETCH_ASSOC);
+
+
+    if($_SESSION['account_type'] == "Student" && ( $user['phone'] == '' || $user['grade_section'] == "" || $user['adviser'] == '' ) ){
+        $_SESSION['profile_warning'] = "Good day " .$user['name']  . ", you need to complete your profile information in order to use this website. Please complete your informations below.";
+        header("location: profile.php");
+    }
+
+    if($_SESSION['account_type'] == "Personnel" && ( $user['phone'] == '' || $user['designation'] == "" ) ){
+        $_SESSION['profile_warning'] = "Good day " .$user['name']  . ", you need to complete your profile information in order to use this website. Please complete your informations below.";
+        header("location: profile.php");
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -330,7 +363,7 @@
         </section>
 
         <?php 
-            $user_id =  (int) $user['id'];
+            $user_id =  (int) $_SESSION['user_id'];
             $stm = $PDO -> prepare("SELECT *
                                     FROM 
                                         tbl_bookmarks

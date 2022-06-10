@@ -133,7 +133,7 @@
             $stm = $PDO -> prepare("SELECT * FROM tbl_reservations
                                     INNER JOIN tbl_items 
                                     ON tbl_reservations.book_id = tbl_items.id
-                                    WHERE borrower_sid = ? AND status IN ('Pending' , 'Approved')");
+                                    WHERE borrower_sid = ? AND status IN ('Expired')");
             $stm -> bindValue( 1 , $sid);
             $stm -> execute();
             $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
@@ -145,7 +145,7 @@
 
                 <?php foreach($res as $i): ?>
                     <div class="card px-0 text-center col-md-5 me-4 mt-4">
-                        <div class="card-header" >   <b>Status : <span class="<?php if( $i['status'] == "Approved") {  echo "badge bg-success";  } else {  echo "badge bg-secondary"; } ?> " > <?php echo $i['status'] ?> </span> </b></div>
+                        <div class="card-header" >   <b>Status : <span class="badge bg-danger" > <?php echo $i['status'] ?> </span> </b></div>
                         <div class="card-body">
                             <h5 class="card-title"> <?php echo $i['title'] ?> </h5>
                             <p class="card-text fst-italic">by <?php echo $i['author'] ?></p>
@@ -154,28 +154,28 @@
 
                         <!-- format date 1 day head for expiration date -->
                         <?php 
-                            if ($i['status'] == "Approved"){
+                            if ($i['status'] == "Expired"){
 
                                 $datetime = new DateTime($i['reservation_date']);
                                 $datetime->add(new DateInterval('P1D'));
                                  ?>
 
-                                <div class="bg-success p-1">
-                                    <span class="text-white">Valid Until: <?php  echo $datetime->format('M d Y H:i:s'); ?>  </span>
+                                <div class="bg-danger p-1">
+                                    <span class="text-white">Missed Reservation: <?php  echo $datetime->format('M d Y H:i:s'); ?>  </span>
                                 </div>
                                <?php } ?>
 
                         <div class="card-footer text-muted">Created On: <?php echo $i['reservation_date']  ?></div>
-                        <a href="removeReservation.php?r_id=<?php echo $i['reservation_id'] ?>" class="btn btn-outline-danger">Cancel Reservation</a>
+                        <a href="removeReservation.php?r_id=<?php echo $i['reservation_id'] ?>" class="btn btn-outline-danger">Delete</a>
                         
                     </div>
                 
                 <?php endforeach; ?>
                 <?php if($stm -> rowCount() == 0 ): ?>
-                    <p class="text-center"> -- No reservations --</p>
+                    <p class="text-center"> --  Empty --</p>
                 <?php endif; ?>
             </div>
-            <a href="./expiredReservation.php" class="">Expired Reservations</a>
+            <a href="./reservations.php" class="">Active Reservations</a>
         </div>
 
 </body>

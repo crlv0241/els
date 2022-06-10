@@ -290,9 +290,9 @@
 
             if( $res['isActivated'] == 1 ){
                 $_SESSION['user'] = $res;
+                $_SESSION['user_id'] = $res['id'];
 
                 echo "Login Successfully";
-                
             } 
             else{
                 echo "Your account is not yet activated";
@@ -386,4 +386,23 @@
         if ($stm -> execute()){
             echo "Bookmark has been removed succesfully";
         }
+    }
+
+
+      // ============ EVENTS ACTIONS ============= //
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_reservation_date" ){
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Approved' AND ADDDATE( reservation_date , INTERVAL 1 DAY) < CURRENT_TIMESTAMP" );
+        $stm -> execute();
+        
+        $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($res as $i){
+            $stm = $PDO -> prepare("UPDATE tbl_reservations SET status = 'Expired' WHERE reservation_id = ?");
+            $stm -> bindValue(1 , $i['reservation_id']);
+                
+            echo $stm -> execute();
+        }
+
+        echo "working";
+        
     }

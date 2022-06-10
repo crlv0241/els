@@ -50,7 +50,7 @@
         $stm -> execute();
 
 
-        if( $stm -> rowCount() > 0){
+        if( $stm -> rowCount() != 0){
             $error = "Action Failed: The book is already exist";
         } else {
 

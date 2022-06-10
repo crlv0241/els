@@ -57,7 +57,7 @@
                     <select class="form-control" name="accountType" id="accountType">
                         <option value="">-- Select account type</option>
                         <option value="Student">Student</option>
-                        <option value="Personnel">Personnel</option>
+                        <option value="Personnel">Teacher / Personnel</option>
                     </select>
 
                     <div id="form-inputs">
@@ -67,6 +67,9 @@
             </div>
         </div>
     </div>
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="../../js/jquery.passwordRequirements.min.js"></script>
     <script>

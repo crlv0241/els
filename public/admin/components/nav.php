@@ -13,10 +13,34 @@
         </div>
     </a>
     <a href="reservations.php">
-
-        <div class="nav-item ">
+<!-- 
+        <div class="nav-item" id="nav-item-reservations">
             <i class="fa-solid fa-swatchbook fs-24"></i>
             <span class="nav-name fs-24 ps-3">Reservations</span>
+        </div> -->
+
+        <?php 
+    
+            $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Pending'" );
+            $stm -> execute();
+            $nPendingAccount = $stm->rowCount();
+
+
+        ?>
+
+
+        <div id="nav-item-pending" class="nav-item position-relativ" style="display:flex ; align-items:center">
+            <span style="width:auto ; position:relative; ">
+                <i style="display: inline-block;" class="fa-solid fa-swatchbook position-relative fs-24"> </i>
+                <?php if($nPendingAccount > 0): ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?php echo $nPendingAccount ?>
+                    </span>
+                <?php endif; ?>
+            </span>
+            <span class="nav-name fs-24 ps-3 position-relative px-2" >
+                Reservations
+            </span>
         </div>
     </a>
 
@@ -65,6 +89,22 @@
             </span>
         </div>
     </a>
-
-
 </div>  
+
+    <!-- change reservation status to expired -->
+    <script>
+        function reservation_check_expiration(){
+            $.ajax({
+                method:'POST',
+                url: "../../actions.php",
+                dataType: "text",
+                data: {action:"check_reservation_date"},
+                success: function (response){
+                    console.log(response);
+                }
+            });
+       
+        }
+
+        setInterval(reservation_check_expiration,1000);
+    </script>

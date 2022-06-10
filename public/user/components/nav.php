@@ -11,8 +11,24 @@
             <div class="collapse navbar-collapse" id="navbarCollapse1" style="justify-content:flex-end; ">
                 <div class="navbar-nav" >
                     <a href="catalogs.php" class="nav-item-catalogs nav-link">Catalogs</a>
-                    <a href="bookmark.php" class="nav-item-bookmarks nav-link">Bookmarks</a>
-                    <a href="reservations.php" class="nav-item-reservations nav-link">Reservations</a>
+                    <a href="bookmark.php" class="nav-item-bookmarks nav-link position-relative">Bookmarks</a>
+
+                    <?php 
+                        $stm  = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND borrower_sid = $sid");
+                        $stm -> execute();
+                        
+                    ?>
+
+                    <a href="reservations.php" class="nav-item-reservations nav-link">
+                        <span  class=" position-relative">
+                        Reservations
+                        <?php if($stm -> rowCount() > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?php echo $stm -> rowCount() ?>    
+                            </span>
+                        <?php endif ?>
+                        </span>
+                    </a>
                     <a href="#" class="nav-item-borrowed nav-link">Borrowed</a>
                     <hr class="nav-divider">
                     <a class="nav-item-borrowed nav-link" href="profile.php">Account</a>
