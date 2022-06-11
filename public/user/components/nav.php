@@ -24,12 +24,12 @@
                         Reservations
                         <?php if($stm -> rowCount() > 0): ?>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?php echo $stm -> rowCount() ?>    
+                                <?php echo $stm -> rowCount() ?>    s
                             </span>
                         <?php endif ?>
                         </span>
                     </a>
-                    <a href="#" class="nav-item-borrowed nav-link">Borrowed</a>
+                    <a href="./uborrow.php" class="nav-item-borrowed nav-link">Borrowed</a>
                     <hr class="nav-divider">
                     <a class="nav-item-borrowed nav-link" href="profile.php">Account</a>
                     <a  class="nav-item-borrowed nav-link" href="./logout.php">Sign out <i class="fa-solid fa-arrow-right-from-bracket"></i></a>

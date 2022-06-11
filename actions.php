@@ -238,6 +238,27 @@
         // echo $stm -> execute()
     }
 
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "returnBook"){
+        $borrow_id = $_POST['borrow_id'];
+        $stm = $PDO -> prepare("UPDATE tbl_borrow SET status = 'Returned' WHERE borrow_id = $borrow_id");
+        $stm -> execute();
+
+        $stm = $PDO -> prepare("SELECT * FROM tbl_borrow  WHERE borrow_id = $borrow_id");
+        $stm -> execute();
+
+        $res =  $stm-> fetch(PDO::FETCH_ASSOC);
+
+        $book_id = $res['book_id'];
+
+        //back to the availble item
+        $stm = $PDO -> prepare( "UPDATE tbl_items SET available = available + 1 WHERE id = $book_id");
+        if($stm -> execute())
+            echo "Item has returned";
+
+        
+    }
+
+    
 
     // ============ USER ACTIONS ============= //
     //SIGN UP
@@ -418,4 +439,21 @@
 
         echo "working";
         
+    }
+
+    //borrowed overdue
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_reservation_date" ){
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_borrow WHERE status = 'Borrow' AND due_date < CURRENT_TIMESTAMP" );
+        $stm -> execute();
+        
+        $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($res as $i){
+            $stm = $PDO -> prepare("UPDATE tbl_borrow SET status = 'Overdue' WHERE borrow_id = ?");
+            $stm -> bindValue(1 , $i['borrow_id']);
+                
+            echo $stm -> execute();
+        }
+
+        echo "overdue";
     }

@@ -84,6 +84,13 @@
 
     $pending_reservations = $stm -> rowCount();
 
+    $stm = $PDO -> prepare(" SELECT * FROM tbl_borrow WHERE borrower_sid = ? AND status IN ('Overdue','Borrow')");
+    $stm -> bindValue( 1 , $sid);
+    $stm -> execute();
+
+    $pending_reservations += $stm -> rowCount();
+    
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -216,13 +223,19 @@
 
                    
                         <p class="text-white px-2"  style="background-color: #2c3e50;">Your Information</p>
-                        <div class="border p-2">
+                        <?php if($_SESSION['account_type'] == "Student") : ?>
+                            <div class="border p-2">
 
-                            <p class="fs-4">Name : <?php echo $user['name']  ?></p>
-                            <p class="fs-6">Grade and Section: <?php echo $user['grade_section']?></p>
-                            <p class="fs-6">Adviser:  <?php echo $user['adviser'] ?></p>
-                        </div>  
-                
+                                <p class="fs-4">Name : <?php echo $user['name']  ?></p>
+                                <p class="fs-6">Grade and Section: <?php echo $user['grade_section']?></p>
+                                <p class="fs-6">Adviser:  <?php echo $user['adviser'] ?></p>
+                            </div>  
+                        <?php else : ?>
+                            <div class="border p-2">
+                                <p class="fs-4">Name : <?php echo $user['name']  ?></p>
+                                <p class="fs-6">Job Title: <?php echo $user['designation']?></p>
+                            </div> 
+                        <?php endif; ?>
                         <button type="submit"   class="<?php if($pending_reservations >= 3) echo "disabled" ?> btn btn-outline-success mt-2">Reserve</button>
                         <?php 
                             if($pending_reservations >= 3){

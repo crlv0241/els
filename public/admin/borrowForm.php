@@ -16,7 +16,14 @@
         $borrower_sid = $_GET['borrower_sid'];
         $reservation_id = $_GET['reservation_id'] ?? null;
 
-        if($_SESSION['account_type'] == "Student")
+        $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE sid = $borrower_sid");
+        $stm -> execute();
+
+        $borrowerAccount = $stm -> fetch(PDO::FETCH_ASSOC);
+
+        $borrowerAccountType = $borrowerAccount['account_type'];
+
+        if($borrowerAccountType == "Student")
             $table = "tbl_students WHERE lrn";
         else 
             $table = "tbl_personnels WHERE employee_id";
@@ -61,10 +68,17 @@
 
         if($stm -> execute()){
             
+            //change request to completed
             $stm = $PDO -> prepare("UPDATE tbl_reservations SET status = 'Completed' WHERE reservation_id  = $reservation_id");
             $stm -> execute();
             echo "<script> alert('New item was lended succesfully') </script> ";
-            header("location:borrow.php");
+            header("location:activeReservations.php");
+
+            //update available books
+            $stm = $PDO -> prepare("UPDATE tbl_items SET available = available -1  WHERE id  = $book_id");
+            $stm -> execute();
+            echo "<script> alert('New item was lended succesfully') </script> ";
+            header("location:activeReservations.php");
         }
 
 
@@ -150,6 +164,7 @@
                                 <p class="fs-6">ISBN: <?php echo $item['isbn'] ?></p>
                                 <?php endif?>   
                                 <p class="fs-6">Author: <?php echo $item['author'] ?></p>
+                                <p class="fs-6">Call Number: <?php echo $item['call_number'] ?></p>
                                 <p class="fs-6">Publisher: <?php echo $item['publisher'] ?></p>
                                 <p class="fs-6">Publication Year: <?php echo $item['date'] ?></p>
                                 <p class="fs-6">Genre: <?php echo $item['genre'] ?></p>
@@ -157,12 +172,19 @@
 
                    
                         <p class="text-white px-2"  style="background-color: #2c3e50;">Borrower Information</p>
-                        <div class="border p-2">
+                        <?php if($borrowerAccountType == "Student"): ?>
+                            <div class="border p-2">
 
-                            <p class="fs-4">Name : <?php echo $borrower['name']  ?></p>
-                            <p class="fs-6">Grade and Section: <?php echo $borrower['grade_section']?></p>
-                            <p class="fs-6">Adviser:  <?php echo $borrower['adviser'] ?></p>
-                        </div>  
+                                <p class="fs-4">Name : <?php echo $borrower['name']  ?></p>
+                                <p class="fs-6">Grade and Section: <?php echo $borrower['grade_section']?></p>
+                                <p class="fs-6">Adviser:  <?php echo $borrower['adviser'] ?></p>
+                            </div> 
+                        <?php else: ?>
+                            <div class="border p-2">
+                                <p class="fs-4">Name : <?php echo $borrower['name']  ?></p>
+                                <p class="fs-6">Job Title: <?php echo $borrower['designation']?></p>
+                            </div> 
+                        <?php endif; ?>
                         <p class="text-white px-2"  style="background-color: #2c3e50;">Details</p>
                         <div class="border p-2">
                             <label for="label">Borrow Date:</label>

@@ -44,8 +44,8 @@
         </div>
     </a>
 
-    <a href="">
-        <div class="nav-item position-relative">
+    <a href="borrow.php">
+        <div id="nav-item-borrow" class="nav-item position-relative">
             <i class="fa-solid fa-clone fs-24"></i>
             <span class="nav-name fs-24 ps-3 position-relative px-2">
                 Borrow
@@ -91,20 +91,37 @@
     </a>
 </div>  
 
-    <!-- change reservation status to expired -->
-    <script>
-        function reservation_check_expiration(){
-            $.ajax({
-                method:'POST',
-                url: "../../actions.php",
-                dataType: "text",
-                data: {action:"check_reservation_date"},
-                success: function (response){
-                    console.log(response);
-                }
-            });
-       
-        }
+<!-- change reservation status to expired -->
+<script>
+    function reservation_check_expiration(){
+        $.ajax({
+            method:'POST',
+            url: "../../actions.php",
+            dataType: "text",
+            data: {action:"check_reservation_date"},
+            success: function (response){
+                console.log(response);
+            }
+        });
+    
+    }
 
-        setInterval(reservation_check_expiration,1000);
-    </script>
+    setInterval(reservation_check_expiration,1000);
+</script>
+
+<!-- detect overdue on borrow -->
+<script>
+    function reservation_check_expiration(){
+        $.ajax({
+            method:'POST',
+            url: "../../actions.php",
+            dataType: "text",
+            data: {action:"check_overdue_borrow"},
+            success: function (response){
+                console.log(response);
+            }
+        });
+    }
+    
+    setInterval(reservation_check_expiration,1000);
+</script>
