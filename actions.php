@@ -217,10 +217,25 @@
     //APPROVE RESERVATION
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "approveReservation"){
         $reservation_id = $_POST['reservation_id'];
+
+
+        // set status to approved
         $stm = $PDO -> prepare("UPDATE tbl_reservations SET status = 'Approved' WHERE reservation_id = $reservation_id");
 
         if($stm -> execute())
             echo "Added new reservation";        
+
+        
+        // $stm = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE reservation_id = $reservation_id");
+        // $stm -> execute();
+
+        // $res = $stm -> fetch(PDO::FETCH_ASSOC);
+
+        // $book_id = $res['book_id'];
+        // echo $book_id;
+        // $stm = $PDO -> prepare( " UPDATE tbl_items SET available = available - 1 WHERE id = $book_id" );
+        
+        // echo $stm -> execute()
     }
 
 
@@ -301,9 +316,6 @@
             echo "Invalid LRN or assword";
         }
     }
-
-
-
 
     //USER SEARCH
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user-search" ){
@@ -390,6 +402,7 @@
 
 
       // ============ EVENTS ACTIONS ============= //
+      //expiration of active reservations
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_reservation_date" ){
         $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Approved' AND ADDDATE( reservation_date , INTERVAL 1 DAY) < CURRENT_TIMESTAMP" );
         $stm -> execute();
