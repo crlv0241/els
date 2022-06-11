@@ -29,7 +29,7 @@
         ?>
 
 
-        <div id="nav-item-pending" class="nav-item position-relativ" style="display:flex ; align-items:center">
+        <div id="nav-item-reservations" class="nav-item position-relativ" style="display:flex ; align-items:center">
             <span style="width:auto ; position:relative; ">
                 <i style="display: inline-block;" class="fa-solid fa-swatchbook position-relative fs-24"> </i>
                 <?php if($nPendingAccount > 0): ?>

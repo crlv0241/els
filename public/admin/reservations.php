@@ -53,17 +53,26 @@
 		
             <section class="books-table" style="height:calc(100vh - 140px)">
                     <div class="row">
+
+                        <!-- GET ACTIVE RESERVATIONS COUNT -->
+                        
+                        <?php 
+                            $activeReservation = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Approved' " );
+                            $activeReservation -> execute();
+                            
+                        ?>
                         <h1 class="col-6" style="cursor:pointer; background-color: green; padding:.5rem;text-align:center; color:white">Requests</h1>
-                        <h1 class="col-6" style="background-color: gray; padding:.5rem;text-align:center; color:white"> <a class="text-white" href="./activeReservations.php"> Reservations </a></h1>
+                        <h1 class="col-6" style="background-color: gray; padding:.5rem;text-align:center; color:white"> <a class="text-white" href="./activeReservations.php"> Reservations [<?php echo $activeReservation -> rowCount(); ?>] </a></h1>
 
                     </div>
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
 						<tr>
-                            <th  class="border" scope="col">LRN / Emp ID</th>
+                            <th  class="border" scope="col">Reservation ID</th>
                             <th  class="border" scope="col">Name</th>
                             <th  class="border" scope="col">Account Type</th>
                             <th  class="border" scope="col">Book</th>
+                            <th  class="border" scope="col">Reserved</th>
                             <th  class="border" scope="col">Available</th>
                             <th  class="border" scope="col">Actions</th>
 						</tr>
@@ -77,20 +86,31 @@
                                                 ON tbl_reservations.borrower_sid = tbl_pending_account.sid
                                                 INNER JOIN tbl_items
                                                 ON tbl_reservations.book_id = tbl_items.id
-                                                 WHERE status = 'Pending'");
+                                                 WHERE status = 'Pending'
+                                                 ORDER BY reservation_date DESC");
                         $stm -> execute();
                         while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr id="tr<?php echo $row['id'] ?>">
-                            <td   class="border"><?php echo $row['sid'] ?>      </td>
+                            <td   class="border"><?php echo $row['reservation_id'] ?>21321    </td>
                             <td   class="border"><?php echo $row['name'] ?>     </td>
                             <td   class="border"><?php echo $row['account_type'] ?>   </td>
                             <td   class="border"><?php echo $row['title'] ?>   </td>
+                            <!-- //count the reserved active reservations -->
+                            <?php 
+                                $countReserve = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND book_id = ?");
+                                $countReserve -> bindValue( 1 , $row['book_id']);
+
+                                $countReserve -> execute();
+
+                                $reserved  = $countReserve -> rowCount();
+                            ?>
+                            <td   class="border"><?php echo $reserved ?>   </td>
                             <td   class="border"><?php echo $row['available'] ?>   </td>
                             <td   class="border" style="width: 100px;" >
                                 <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
                                     <button class="btn btn-outline-success" onclick="approveReservation(`<?php echo $row['reservation_id']?>`)" > Accept </button>
-                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  >  Decline </button>
+                                    <!-- <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  >  Decline </button> -->
                                 </div>
                             </td>
                         </tr>
@@ -277,9 +297,7 @@
             $('div.dataTables_length select').removeClass("input-sm");
 
             $(" #nav-item-reservations").addClass( "active")
-            $(" #nav-item-reservations").click(function (e){
-                e.preventDefault();
-            });
+        
 		});  
 
 

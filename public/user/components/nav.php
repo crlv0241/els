@@ -19,7 +19,7 @@
                         
                     ?>
 
-                    <a href="reservations.php" class="nav-item-reservations nav-link">
+                    <a href="reservations.php" class="nav-item-reservations nav-link" >
                         <span  class=" position-relative">
                         Reservations
                         <?php if($stm -> rowCount() > 0): ?>

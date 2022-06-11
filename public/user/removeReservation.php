@@ -7,6 +7,7 @@
         
         if( $stm -> execute() ){
             echo "<script> alert('Reservation was removed successfully.') </script>";
+
             header("location: reservations.php");
         }
         else {

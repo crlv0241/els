@@ -53,21 +53,27 @@
 		
             <section class="books-table" style="height:calc(100vh - 140px)">
                     <div class="row">
+
+                        <?php 
+                            $activeReservation = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Approved' " );
+                            $activeReservation -> execute();
+                            
+                        ?>
                         <h1 class="col-6" style="cursor:pointer; background-color: gray; padding:.5rem;text-align:center; color:white"><a class="text-white" href="./reservations.php"> Requests </a></h1>
-                        <h1 class="col-6" style="background-color: green; padding:.5rem;text-align:center; color:white"> <a class="text-white" href=""> Reservations </a></h1>
+                        <h1 class="col-6" style="background-color: green; padding:.5rem;text-align:center; color:white"> <a class="text-white" href=""> Reservations [<?php echo $activeReservation -> rowCount() ?>] </a></h1>
 
                     </div>
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
-					<thead >
-						<tr>
-                            <th  class="border" scope="col">LRN / Emp ID</th>
-                            <th  class="border" scope="col">Name</th>
-                            <th  class="border" scope="col">Account Type</th>
-                            <th  class="border" scope="col">Book</th>
-                            <th  class="border" scope="col">Available</th>
-                            <th  class="border" scope="col">Actions</th>
-						</tr>
-					</thead>
+                        <thead>
+                            <tr>
+                                <th  class="border" scope="col">LRN / Emp ID</th>
+                                <th  class="border" scope="col">Name</th>
+                                <th  class="border" scope="col">Account Type</th>
+                                <th  class="border" scope="col">Book</th>
+                                <th  class="border" scope="col">Expiration Date</th>
+                                <th  class="border" scope="col">Actions</th>
+                            </tr>
+                        </thead>
 					<tbody>
 
                     <!-- GET THE BOOKS  -->
@@ -77,20 +83,24 @@
                                                 ON tbl_reservations.borrower_sid = tbl_pending_account.sid
                                                 INNER JOIN tbl_items
                                                 ON tbl_reservations.book_id = tbl_items.id
-                                                 WHERE status = 'Approved'");
+                                                WHERE status = 'Approved'");
                         $stm -> execute();
                         while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr id="tr<?php echo $row['id'] ?>">
-                            <td   class="border"><?php echo $row['sid'] ?>      </td>
-                            <td   class="border"><?php echo $row['name'] ?>     </td>
-                            <td   class="border"><?php echo $row['account_type'] ?>   </td>
+                            <td   class="border"><?php echo $row['sid'] ?>           </td>
+                            <td   class="border"><?php echo $row['name'] ?>          </td>
+                            <td   class="border"><?php echo $row['account_type'] ?>  </td>
                             <td   class="border"><?php echo $row['title'] ?>   </td>
-                            <td   class="border"><?php echo $row['reservation_date'] ?>   </td>
+                            <?php 
+                                $expiration_date = new DateTime($row['reservation_date']);
+                                $expiration_date -> add(new DateInterval('P1D'));
+                            ?>
+                            <td   class="border"><?php echo $expiration_date -> format("M-d-Y h:i A"); ?>   </td>
                             <td   class="border" style="width: 100px;" >
                                 <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
-                                    <button class="btn btn-outline-success" onclick="approveReservation(`<?php echo $row['reservation_id']?>`)" > Accept </button>
-                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  >  Decline </button>
+                                    <a href="borrowForm.php?borrower_sid=<?php echo $row['borrower_sid'] ?>&book_id=<?php echo $row['book_id'] ?>&reservation_id=<?php echo $row['reservation_id'] ?>" class="btn btn-outline-success"  > Borrow </a>
+                                    <!-- <button class="btn btn-outline-danger" onclick="rejectId = <?php //echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  >  Decline </button> -->
                                 </div>
                             </td>
                         </tr>

@@ -83,7 +83,7 @@
                             <td   class="border"><?php echo $row['author'] ?></td>
                             <td   class="border"><?php echo $row['genre'] ?></td>
                             <td   class="border" ><?php echo $row['quantity'] ?></td>
-                            <td   class="border" style="font-weight: bold; color:green"><?php echo $row['quantity'] ?></td>
+                            <td   class="border" style="font-weight: bold; color:green"><?php echo $row['available'] ?></td>
                             <td  class="border">
                                 <div class="actions" style="display: flex; justify-content:space-around;">
                                     <span>

@@ -152,7 +152,7 @@
                         </div>
  
 
-                        <!-- format date 1 day head for expiration date -->
+                        <!-- format date 1 day ahead to get expiration date -->
                         <?php 
                             if ($i['status'] == "Approved"){
 

@@ -202,8 +202,9 @@
                         <div class="border p-2">
 
                             <p class="fs-4">Title: <?php echo $res['title']  ?></p>
-                            <p class="fs-6"> <?php echo $res['edition'] . ' ' . $res['editionNum'] ?></p>
-                            
+                            <?php if( $res['edition'] != 'none') :?>
+                                <p class="fs-6"> <?php echo $res['edition'] . ' ' . $res['editionNum'] ?></p>
+                            <?php endif ?>
                             <?php if($res['isbn']): ?>
                                 <p class="fs-6">ISBN: <?php echo $res['isbn'] ?></p>
                                 <?php endif?>
