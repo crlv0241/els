@@ -1,0 +1,140 @@
+<?php
+    // session_start();
+
+    // $client = $_SESSION['client'] ?? null;
+
+    // if ( !isset($client) )
+    // {
+    //     header("location:login.php");
+    // }
+
+    require_once "../../db/connecttion.php";
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Library</title>
+
+    <?php require_once "../../cdn.php" ?>
+
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/nav.css">
+    <link rel="stylesheet" href="../../css/library.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />   
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+  
+    <link rel="stylesheet" href="../../css/jquery.passwordRequirements.css">
+
+           <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />  
+           <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
+           <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>             -->
+</head>
+<body>
+    <header>
+        <?php require_once "./components/header.php" ?>
+    </header>
+    
+    <div class="d-flex nav-content-wrapper">
+        <nav id="main-nav" >
+            <?php require_once "./components/nav.php" ?>
+        </nav>
+        
+        <div class="dashboard">
+            <div class="col-lg-7 ">
+                <h2 class="h2">New Borrow</h2>
+                <form class="form-control shadow" id="signup" method="POST" >
+                    <h2>User Information</h2>
+                    <div id="div-info"></div>
+                    <select required class="form-control" name="accountType" id="accountType">
+                        <option value="">-- Select account type</option>
+                        <option value="Student">Student</option>
+                        <option value="Personnel">Teacher / Personnel</option>
+                    </select>
+
+                    <div id="form-inputs">
+                    </div>
+
+                    <input class="btn btn-primary mt-4" style="background-color: green ;" type="submit"  value="Borrow" />
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="../../js/jquery.passwordRequirements.min.js"></script>
+    <script>
+        function clearHtml(classname){
+            $('#'+classname + ' .shadow').fadeOut("fast");
+        }
+    </script>
+
+    <!-- toggle placeholder account type -->
+    <script>
+        document.getElementById("accountType").addEventListener('change', function(){
+            if(this.value == "Student"){
+                document.getElementById("form-inputs").innerHTML = `
+                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
+                        <input onchange="findAccount()" id="student_sid" class="form-control mt-2" type="text" name="sid" placeholder="Learner Reference Number" required />
+                        <input id="student_name" class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
+                        <input id="grade_section" class="form-control mt-2" type="text" id="grade_section" name="grade_section" placeholder="Grade and Section" required/>
+                        <input id="adviser" class="form-control mt-2" type="text" id="adviser" name="adviser" placeholder="Adviser" required/>
+                `;
+            }
+            else if(this.value == "Personnel" ){
+                document.getElementById("form-inputs").innerHTML = `
+                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
+                        <input id="employee_sid" class="form-control mt-2" type="text" name="sid" placeholder="Employee Number" required />
+                        <input id="employee_name" class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
+                        <input id="designation" class="form-control mt-2" type="text" name="designation" placeholder="Job title" required/>
+                        
+                     
+                `;
+            }
+            else {
+                document.getElementById("form-inputs").innerHTML = ``;
+            }
+        })
+    </script>
+
+
+    <script>
+        $( "#nav-toggler" ).click(function() {
+            $( "#main-nav" ).slideToggle( "fast" );
+        });
+    </script>
+
+
+
+
+    <script>
+        $("#signup").submit( function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: "../../actions.php",
+                method: "POST",
+                data: $(this).serialize(),
+                dataType: "html",
+                success: function (data){
+                    console.log(data);
+                        document.getElementById("div-info").innerHTML = data;
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>
