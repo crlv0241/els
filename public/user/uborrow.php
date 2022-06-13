@@ -123,7 +123,7 @@
         <section class="container-wave"  style="display:flex ; align-items:flex-end">
             <div class="container" style="display:flex ; align-items:flex-end">
 
-                <h2 class="h1 py-2" style="color:white; z-index:20">Reservations</h2>
+                <h2 class="h1 py-2" style="color:white; z-index:20">Borrow</h2>
             </div>
             <div class="wave" style="display:flex; align-items:flex-end">
             </div>  

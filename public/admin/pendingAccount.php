@@ -36,7 +36,7 @@
            <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
            <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>             -->
     <script>
-        let rejectId;
+        let rejectId, acceptId;
     </script>
 </head>
 <body>
@@ -53,42 +53,51 @@
 		
             <section class="books-table" style="height:calc(100vh - 140px)">
                     <h1 style="background-color: var(--maroon); padding:.5rem;text-align:center; color:white">Pending Accounts</h1>
-                    <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
-					<thead >
-						<tr>
-                            <th  class="border" scope="col">LRN / Emp ID</th>
-                            <th  class="border" scope="col">Name</th>
-                            <th  class="border" scope="col">Email</th>
-                            <th  class="border" scope="col">Account Type</th>
-                            <th  class="border" scope="col">Image Proof</th>
-                            <th  class="border" scope="col">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
+                    <form id="pending_accounts">
 
-                    <!-- GET THE BOOKS  -->
-                    <?php 
-                        $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE isActivated = 0");
-                        $stm -> execute();
-                        while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
-                        <tr id="tr<?php echo $row['id'] ?>">
-                            <td   class="border"><?php echo $row['sid'] ?>      </td>
-                            <td   class="border"><?php echo $row['name'] ?>     </td>
-                            <td   class="border"><?php echo $row['email'] ?>    </td>
-                            <td   class="border"><?php echo $row['account_type'] ?>   </td>
-                            <td   class="border"> <img style="cursor:zoom-in" width="100" class="fullscreen" onClick="zoomin(`../../<?php echo $row['imgid'] ?>`)" src="../../<?php echo $row['imgid'] ?>" alt="">   </td>
-                            <td   class="border" style="width: 100px;" >
-                                <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
-                                    <button class="btn btn-outline-success" onclick="approveAccount(`<?php echo $row['sid']?>`)" ><i class="fa-solid fa-user-check"></i></i> Activate </button>
-                                    <button class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  > <i class="fa-solid fa-user-xmark"></i> Decline </button>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
+                        <a class="btn" onclick="selectall(this)">Select All</a>
 
-                </tbody>
-            </table>
+                        <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
+                            <thead >
+                                <tr>
+                                    <th></th>
+                                    <th  class="border" scope="col">LRN / Emp ID</th>
+                                    <th  class="border" scope="col">Name</th>
+                                    <th  class="border" scope="col">Email</th>
+                                    <th  class="border" scope="col">Account Type</th>
+                                    <th  class="border" scope="col">Image Proof</th>
+                                    <th  class="border" scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <!-- GET THE BOOKS  -->
+                                <?php 
+                                    $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE isActivated = 0");
+                                    $stm -> execute();
+                                    while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
+                                ?>
+                                    <tr id="tr<?php echo $row['id'] ?>">
+                                        <td   class="border"> <input  style="margin: auto;display:block" type="checkbox"  onchange="makeActive('tr<?php echo $row['id'] ?>',this)" value="<?php echo $row['id'] ?>">       </td>
+                                        <td   class="border"><?php echo $row['sid'] ?>      </td>
+                                        <td   class="border"><?php echo $row['name'] ?>     </td>
+                                        <td   class="border"><?php echo $row['email'] ?>    </td>
+                                        <td   class="border"><?php echo $row['account_type'] ?>   </td>
+                                        <td   class="border"> <img style="cursor:zoom-in" width="100" class="fullscreen" onClick="zoomin(`../../<?php echo $row['imgid'] ?>`)" src="../../<?php echo $row['imgid'] ?>" alt="">   </td>
+                                        <td   class="border" style="width: 100px;" >
+                                            <div style="display: flex ; height:100%; justify-content:space-around; gap:1rem; align-items:center">
+                                                <a class="btn btn-outline-success" onclick="acceptId = <?php echo $row['id']?>" data-bs-toggle = "modal" data-bs-target = "#acceptModal" ><i class="fa-solid fa-user-check"></i></i> Activate </a>
+                                                <a class="btn btn-outline-danger" onclick="rejectId = <?php echo $row['id'] ?>" data-bs-toggle = "modal" data-bs-target = "#rejectModal"  > <i class="fa-solid fa-user-xmark"></i> Decline </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+
+                            </tbody>
+                        </table>
+
+                    </form>
+
             
                 <?php if($stm->rowCount() == 0 ): ?>
                     <p class="text-center">
@@ -163,6 +172,27 @@
         </div>
     </div>
 
+   
+    <!-- MODAL ACCEPT ACCOUNT -->
+    <div class="modal fade" id="acceptModal" data-bs-backdrop="static">
+        <div class="modal-dialog">
+                <div class="modal-content" style="margin-left:0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Accept account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div>
+                        <p class="px-4">Confirm to activate the account</p>
+                    </div>
+           
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" onclick="approveAccount(acceptId)"   data-bs-dismiss="modal" class="btn btn-success">Accept Account</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
     <!-- REJECT ACCOUNT -->
     <script>
         let rejectModal = document.getElementById('btn-reject');
@@ -184,6 +214,27 @@
                 }
             });
         })
+    </script>
+
+    <!-- MAKE THE TR ACTIVE WHEN IT WAS SELECTED -->
+    <script>
+        function makeActive(tr_id,checkbox){
+            console.log(checkbox.checked)
+            if(checkbox.checked){
+                document.getElementById(tr_id).classList.add("active")
+            } else {
+                document.getElementById(tr_id).classList.remove("active");
+            }
+        }
+    </script>
+
+
+    <!-- SELECT ALL -->
+    <script>
+        function selectall(elem){
+            jQuery(elem).closest("form").find("input:checkbox").prop('checked', true);
+            jQuery(elem).closest("form").find("tr").addClass("active");
+        }
     </script>
 
     <script>
