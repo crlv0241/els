@@ -123,12 +123,12 @@
 
     //APPROVED ACCOUNT
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "approveAccount"){
-        $lrn = $_POST['lrn'];
+        $id = $_POST['id'];
         
-        $stm = $PDO -> prepare( "UPDATE tbl_pending_account SET isActivated = 1  WHERE sid = '$lrn'" );
+        $stm = $PDO -> prepare( "UPDATE tbl_pending_account SET isActivated = 1  WHERE id = $id" );
         $stm ->execute();
 
-        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE sid = '$lrn'" );
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE id = $id" );
         $stm ->execute();
 
         $res = $stm -> fetch(PDO::FETCH_ASSOC);

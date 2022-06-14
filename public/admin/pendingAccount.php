@@ -56,6 +56,10 @@
                     <form id="pending_accounts">
 
                         <a class="btn" onclick="selectall(this)">Select All</a>
+                        <div style="display: none;" id="action_wrapper">
+                            <a class="btn btn-sm btn-success">Accept Accounts</a>
+                            <a class="btn btn-sm btn-danger">Reject Accounts</a>
+                        </div>
 
                         <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
                             <thead >
@@ -78,7 +82,7 @@
                                     while( $row = $stm->fetch(PDO::FETCH_ASSOC)) :
                                 ?>
                                     <tr id="tr<?php echo $row['id'] ?>">
-                                        <td   class="border"> <input  style="margin: auto;display:block" type="checkbox"  onchange="makeActive('tr<?php echo $row['id'] ?>',this)" value="<?php echo $row['id'] ?>">       </td>
+                                        <td   class="border"> <input  style="margin: auto;display:block" type="checkbox" name="selectedAccount[]"  onchange="makeActive('tr<?php echo $row['id'] ?>',this)" value="<?php echo $row['id'] ?>">       </td>
                                         <td   class="border"><?php echo $row['sid'] ?>      </td>
                                         <td   class="border"><?php echo $row['name'] ?>     </td>
                                         <td   class="border"><?php echo $row['email'] ?>    </td>
@@ -92,7 +96,6 @@
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-
                             </tbody>
                         </table>
 
@@ -234,6 +237,29 @@
         function selectall(elem){
             jQuery(elem).closest("form").find("input:checkbox").prop('checked', true);
             jQuery(elem).closest("form").find("tr").addClass("active");
+            document.getElementById("action_wrapper").style.display = "inline";
+        }
+    </script>
+
+    
+    <!-- SHOW DELETE OR ACCEPT BASED ON CHECKED BOX -->
+    <script>
+        const form = document.getElementById("pending_accounts");
+
+        form.onchange = function(){
+            let checkboxes = document.getElementsByName("selectedAccount[]");
+            
+            const selectedAccounts = [];
+
+            checkboxes.forEach(item => {
+                if(item.checked)
+                    selectedAccounts.push(item.value);
+            })
+
+            if(selectedAccounts.length > 0)
+                document.getElementById("action_wrapper").style.display = "inline";
+            else
+            document.getElementById("action_wrapper").style.display = "none";
         }
     </script>
 
@@ -271,13 +297,13 @@
 
     <!-- ARPPOVED ACCOUNT -->
     <script>
-        function approveAccount(lrn){
+        function approveAccount(id){
             $.ajax({
                 method: "POST",
                 url: "../../actions.php",
                 data: {
                     action: "approveAccount",
-                    lrn : lrn,
+                    id : id,
                 },
 
                 success: function(response){
@@ -290,8 +316,6 @@
             });
         }
     </script>
-
-
 
     <!-- ZOOM IN ON IMAGE -->
     <script>
@@ -309,7 +333,6 @@
             document.getElementById("img-prev").innerHTML = ``;
         }
     </script>
-
 
     <!-- NAV -->
 	<script>  
