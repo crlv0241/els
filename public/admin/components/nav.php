@@ -19,24 +19,15 @@
             <span class="nav-name fs-24 ps-3">Reservations</span>
         </div> -->
 
-        <?php 
-    
-            $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Pending'" );
-            $stm -> execute();
-            $nPendingAccount = $stm->rowCount();
 
-
-        ?>
 
 
         <div id="nav-item-reservations" class="nav-item position-relativ" style="display:flex ; align-items:center">
             <span style="width:auto ; position:relative; ">
                 <i style="display: inline-block;" class="fa-solid fa-swatchbook position-relative fs-24"> </i>
-                <?php if($nPendingAccount > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?php echo $nPendingAccount ?>
-                    </span>
-                <?php endif; ?>
+                    <div id="pending_reservations">
+                        
+                    </div>
             </span>
             <span class="nav-name fs-24 ps-3 position-relative px-2" >
                 Reservations
@@ -54,24 +45,14 @@
         </div>
     </a>
 
-    <?php 
-  
-        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE isActivated = 0" );
-        $stm -> execute();
-        $nPendingAccount = $stm->rowCount();
-
-
-    ?>
 
     <a href="../admin/pendingAccount.php" title="Pending Accounts">
         <div id="nav-item-pending" class="nav-item position-relativ" style="display:flex ; align-items:center">
             <span style="width:auto ; position:relative; ">
                 <i style="display: inline-block;" class="fa-solid fa-person-circle-question position-relative fs-24"> </i>
-                <?php if($nPendingAccount > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?php echo $nPendingAccount ?>
-                    </span>
-                <?php endif; ?>
+                   <div id="pending_account_div">
+                       
+                    </div>
             </span>
             <span class="nav-name fs-24 ps-3 position-relative px-2" >
                 Pending Account
@@ -118,10 +99,44 @@
             dataType: "text",
             data: {action:"check_overdue_borrow"},
             success: function (response){
-                console.log(response);
             }
         });
     }
     
     setInterval(reservation_check_expiration,1000);
+</script>
+
+<!-- detect new pending account  -->
+<script>
+    function check_pending_accounnts(){
+        $.ajax({
+            method:'POST',
+            url: "../../actions.php",
+            dataType: "text",
+            data: {action:"check_pending_account"},
+            success: function (response){
+                document.getElementById("pending_account_div").innerHTML = response;
+            }
+        });
+    }
+    
+    setInterval(check_pending_accounnts,250);
+</script>
+
+
+<!-- detect new pending reservations  -->
+<script>
+    function check_pending_accounnts(){
+        $.ajax({
+            method:'POST',
+            url: "../../actions.php",
+            dataType: "text",
+            data: {action:"check_pending_reservations"},
+            success: function (response){
+                document.getElementById("pending_reservations").innerHTML = response;
+            }
+        });
+    }
+    
+    setInterval(check_pending_accounnts,250);
 </script>

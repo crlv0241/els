@@ -404,6 +404,7 @@
                                     <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: <?php echo $i['date'] ?> </li>
                                     <li><i class="fa-solid fa-signature me-2"></i>Genre: <?php echo $i['genre'] ?> </li>
                                     <li><i class="fa-solid fa-tag me-2"></i>Call Number: <?php echo $i['call_number'] ?> </li>
+                                    <li><i class="fa-solid fa-hashtag me-2"></i>Catalog Number: <?php echo $i['id'] ?> </li>
 
                                     <li>
                                     <div class="accordion" id="accordionExample">
@@ -423,7 +424,7 @@
                                     </li>
                                 </ul>
 
-                                <a class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
+                                <a href="./reserve.php?book_id=<?php echo $i['id']?>" class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
                                 <a onclick="removeBookmark('<?php echo $i['id'] ?>')" class="btn btn-danger btn-mid "  ><i class="fa-solid fa-eraser me-2"></i>Remove</a>
                             </div>
                         </div>

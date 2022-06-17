@@ -13,27 +13,61 @@
                     <a href="catalogs.php" class="nav-item-catalogs nav-link">Catalogs</a>
                     <a href="bookmark.php" class="nav-item-bookmarks nav-link position-relative">Bookmarks</a>
 
-                    <?php 
-                        $stm  = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND borrower_sid = $sid");
-                        $stm -> execute();
-                        
-                    ?>
+           
 
                     <a href="reservations.php" class="nav-item-reservations nav-link" >
                         <span  class=" position-relative">
                         Reservations
-                        <?php if($stm -> rowCount() > 0): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?php echo $stm -> rowCount() ?>    s
-                            </span>
-                        <?php endif ?>
+                            <div id="reservation_notif">
+
+                            </div>
                         </span>
                     </a>
-                    <a href="./uborrow.php" class="nav-item-borrowed nav-link">Borrowed</a>
+                    <a href="./uborrow.php" class="nav-item-borrowed nav-link">
+                        <span  class=" position-relative">
+                        Borrowed
+                            <div id="borrowed_notif">
+
+                            </div>
+                        </span>
+                        
+                    </a>
                     <hr class="nav-divider">
                     <a class="nav-item-borrowed nav-link" href="profile.php">Account</a>
                     <a  class="nav-item-borrowed nav-link" href="./logout.php">Sign out <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                 </div>
             </div>
         </div>
-    </nav>
+    </nav>`
+
+    <!-- COUNT THE NUMBERS OF RESERVATIONS -->
+    <script>
+        setInterval(
+            function(){
+                $.ajax({
+                    method : "POST",
+                    url: "../../actions.php",
+                    data: {action : "user_reservation_notifcation_count"},
+                    success: function (response){
+                        document.getElementById("reservation_notif").innerHTML = response;
+                    }
+                });
+            }
+            ,250)
+    </script>
+
+    <!-- COUNT THE NUMBERS OF BORROW  -->
+    <script>
+        setInterval(
+            function(){
+                $.ajax({
+                    method : "POST",
+                    url: "../../actions.php",
+                    data: {action : "user_borrow_notifcation_count"},
+                    success: function (response){
+                        document.getElementById("borrowed_notif").innerHTML = response;
+                    }
+                });
+            }
+            ,250)
+    </script>

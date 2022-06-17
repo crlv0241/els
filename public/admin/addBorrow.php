@@ -51,7 +51,7 @@
         <div class="dashboard">
             <div class="col-lg-7 ">
                 <h2 class="h2">New Borrow</h2>
-                <form class="form-control shadow" id="signup" method="POST" >
+                <form class="form-control shadow" id="formBorrow" method="POST" >
                     <h2>User Information</h2>
                     <div id="div-info"></div>
                     <select required class="form-control" name="accountType" id="accountType">
@@ -62,13 +62,39 @@
 
                     <div id="form-inputs">
                     </div>
+                    <div class="p-2" id="borrower_info">
+                        
+                    </div>
+                    <div class="p-2" id="item_info">
+                        
+                    </div>
+                    <input class="form-control mt-2" type="hidden" name="action" value="addBorrow">
 
-                    <input class="btn btn-primary mt-4" style="background-color: green ;" type="submit"  value="Borrow" />
+                    <input class="btn btn-primary mt-4" id="btn_borrow_submit" style="background-color: green ;" type="submit"  value="Borrow" />
                 </form>
-                
             </div>
         </div>
     </div>
+
+    <!-- MODAL  ADD NEW BORROW -->
+    <div class="modal fade" id="addBorrowModal" data-bs-backdrop="static">
+        <div class="modal-dialog">
+                <div class="modal-content" style="margin-left:0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Confirm Transaction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Select the confirm button to proceed. </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="btn-reject"    data-bs-dismiss="modal" class="btn btn-success">Confirm</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
 
 
 
@@ -83,23 +109,19 @@
     <!-- toggle placeholder account type -->
     <script>
         document.getElementById("accountType").addEventListener('change', function(){
+            document.getElementById("borrower_info").innerHTML =  ``;
+            document.getElementById("item_info").innerHTML =  ``;
             if(this.value == "Student"){
                 document.getElementById("form-inputs").innerHTML = `
-                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
-                        <input onchange="findAccount()" id="student_sid" class="form-control mt-2" type="text" name="sid" placeholder="Learner Reference Number" required />
-                        <input id="student_name" class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
-                        <input id="grade_section" class="form-control mt-2" type="text" id="grade_section" name="grade_section" placeholder="Grade and Section" required/>
-                        <input id="adviser" class="form-control mt-2" type="text" id="adviser" name="adviser" placeholder="Adviser" required/>
+                        <input onkeyup="findAccount(this , 'Student' )" id="student_sid" class="form-control mt-2" type="text" name="sid" placeholder="Learner Reference Number" required />
+                        <input  onkeyup="findCatalog(this)" required type="number" name="catalog_number" placeholder="Catalog Number" class="form-control mt-2">
+
                 `;
             }
             else if(this.value == "Personnel" ){
                 document.getElementById("form-inputs").innerHTML = `
-                <input class="form-control mt-2" type="hidden" name="action" value="btn-createUser">
-                        <input id="employee_sid" class="form-control mt-2" type="text" name="sid" placeholder="Employee Number" required />
-                        <input id="employee_name" class="form-control mt-2" type="text" name="name" placeholder="Full Name" required/>
-                        <input id="designation" class="form-control mt-2" type="text" name="designation" placeholder="Job title" required/>
-                        
-                     
+                        <input  onkeyup="findAccount(this , 'Employee' )" id="employee_sid" class="form-control mt-2" type="text" name="sid" placeholder="Employee Number" required />
+                        <input onkeyup="findCatalog(this)" required type="number" name="catalog_number" placeholder="Catalog Number" class="form-control mt-2">
                 `;
             }
             else {
@@ -115,26 +137,86 @@
         });
     </script>
 
+    <!--Search Account   -->
+    <script>
+        function findAccount(input, accounType){
+            let sid = input.value;
 
+            if(!sid)
+                return;
 
+            let AT = accounType;
+            console.log(sid)
+            $.ajax({
+                method: "POST",
+                url: "../../actions.php",
+                dataType : "html",
+                data: {
+                    action : "borrowSearchAccount",
+                    sid : sid,
+                    accountType: AT
+                },
+                success : function ( response ){
+                    document.getElementById("borrower_info").innerHTML = response;
+                    
+                }
+            });
+        }
+    </script>
+
+    <!-- Find catallog -->
+    <script>
+        function findCatalog(input){
+            let catalog_number =  input.value;
+            $.ajax({
+                url: "../../actions.php",
+                method : "POST",
+                dataType : "html",
+                data: {
+                    action: "findCatalog",
+                    catalog_number : catalog_number
+                } ,
+                success: function(response){
+                    document.getElementById("item_info").innerHTML = response;
+
+                }
+            });
+        }
+    </script>
 
     <script>
-        $("#signup").submit( function(e){
+        $("#formBorrow").submit( function(e){
+            
             e.preventDefault();
-
+          
             $.ajax({
                 url: "../../actions.php",
                 method: "POST",
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (data){
-                    console.log(data);
-                        document.getElementById("div-info").innerHTML = data;
+                    document.getElementById("div-info").innerHTML = data;
+                    $('#addBorrowModal').modal("show");
                 }
             });
         });
-
     </script>
+
+    <!-- disabled the submit until the form is valid -->
+    <script>
+        document.getElementById("formBorrow").onchange = function(){
+        
+            let item_info = document.getElementById("item_info").innerHTML ==  '<p class="text-danger">Invalid catalog number</p>' ;
+            let borrower_info = document.getElementById("borrower_info").innerHTML ==  '<p class="text-danger"> Invalid account </p>';
+
+            if(item_info || borrower_info){
+                document.getElementById("btn_borrow_submit").disabled = true;
+            } else {
+                document.getElementById("btn_borrow_submit").disabled = false;
+        }
+
+        }
+    </script>  
 
 </body>
 </html>

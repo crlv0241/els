@@ -67,7 +67,7 @@
                         <h1 class="col-6" style="background-color: gray; padding:.5rem;text-align:center; color:white"> <a class="text-white" href="./overdueBorrow.php"> Overdue [<?php echo $activeReservation -> rowCount(); ?>] </a></h1>
 
                     </div>
-                    <a href="./addBorrow.php" class="btn btn-outline-success my-2">Add New Borrow</a>
+                    <a href="./addBorrow.php" class="btn btn-outline-success my-2">Add Borrow</a>
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
 						<tr>

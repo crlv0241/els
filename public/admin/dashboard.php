@@ -61,9 +61,10 @@
 					<thead >
 						<tr>
 						<th  class="border" scope="col">Title</th>
-						<th  class="border" scope="col">Call Number</th>
 						<th  class="border" scope="col">Authors</th>
 						<th  class="border" scope="col">Genre</th>
+						<th  class="border" scope="col">Call Number</th>
+						<th  class="border" scope="col">Catalog Number</th>
 						<th  class="border" scope="col">QTY</th>
 						<th  class="border" scope="col">Available</th>
 						<th  class="border" scope="col">Actions</th>
@@ -79,9 +80,10 @@
                     ?>
                         <tr>
                             <td   class="border"><?php echo $row['title'] ?></td>
-                            <td   class="border"><?php echo $row['call_number'] ?></td>
                             <td   class="border"><?php echo $row['author'] ?></td>
                             <td   class="border"><?php echo $row['genre'] ?></td>
+                            <td   class="border"><?php echo $row['call_number'] ?></td>
+                            <td   class="border"><?php echo $row['id'] ?></td>
                             <td   class="border" ><?php echo $row['quantity'] ?></td>
                             <td   class="border" style="font-weight: bold; color:green"><?php echo $row['available'] ?></td>
                             <td  class="border">

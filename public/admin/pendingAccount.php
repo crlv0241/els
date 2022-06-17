@@ -57,8 +57,8 @@
 
                         <a class="btn" onclick="selectall(this)">Select All</a>
                         <div style="display: none;" id="action_wrapper">
-                            <a class="btn btn-sm btn-success">Accept Accounts</a>
-                            <a class="btn btn-sm btn-danger">Reject Accounts</a>
+                            <a data-bs-toggle="modal" data-bs-target="#acceptSelected" class="btn btn-sm btn-success">Accept Accounts</a>
+                            <a class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectSelectedModal">Reject Accounts</a>
                         </div>
 
                         <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
@@ -98,7 +98,8 @@
                                 <?php endwhile; ?>
                             </tbody>
                         </table>
-
+                        
+                        <input id="selectionAction" type="hidden" name="action" value="accept_selected_account">
                     </form>
 
             
@@ -114,6 +115,11 @@
     <div id="img-prev">
        
     </div>
+
+
+
+    <!-- =============== MODALS =============== -->
+
 
     <!-- SAMPLE POP UP INFO -->
     <div class="div-info" id="div-info">
@@ -169,7 +175,27 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="btn-reject"    data-bs-dismiss="modal" class="btn btn-danger">Reject Account</button>
+                        <button type="button"  id="btn-reject"   data-bs-dismiss="modal" class="btn btn-danger">Reject Account</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- MODAL REJECT SELECTED  ACCOUNTS -->
+    <div class="modal fade" id="rejectSelectedModal" data-bs-backdrop="static">
+        <div class="modal-dialog">
+                <div class="modal-content" style="margin-left:0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Decline accounts</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Reason  of declination</label>
+                        <input type="text" name="reason"  id="reason" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" onclick="rejectSelected()" id="btn-reject"   data-bs-dismiss="modal" class="btn btn-danger">Reject Accounts</button>
                     </div>
                 </div>
         </div>
@@ -195,6 +221,33 @@
                 </div>
         </div>
     </div>
+
+  
+
+    <!-- MODAL ACCEPT SELECTED ACCOUNTs -->
+    <div class="modal fade" id="acceptSelected" data-bs-backdrop="static">
+        <div class="modal-dialog">
+                <div class="modal-content" style="margin-left:0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Accept account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div>
+                        <p class="px-4">Confirm to activate the account</p>
+                    </div>
+           
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" onclick="activate_selected_accounts()"   data-bs-dismiss="modal" class="btn btn-success">Accept Account</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+
+    <!-- =============== SCRIPTS =============== -->
+
 
     <!-- REJECT ACCOUNT -->
     <script>
@@ -237,31 +290,76 @@
         function selectall(elem){
             jQuery(elem).closest("form").find("input:checkbox").prop('checked', true);
             jQuery(elem).closest("form").find("tr").addClass("active");
-            document.getElementById("action_wrapper").style.display = "inline";
+
+            let checkboxes = document.getElementsByName("selectedAccount[]") ;
+            if(checkboxes.length != 0)
+                document.getElementById("action_wrapper").style.display = "inline";
+
         }
     </script>
 
+
+    <!--  REJECT SELECTED ACCOUNTS -->
+    <script>
+        function rejectSelected(){
+            document.getElementById("selectionAction").value = "reject_selected_accounts";
+            $.ajax({
+                method:"POST",
+                url: "../../actions.php",
+                dataType: "text",
+                data: $("#pending_accounts").serialize(),
+                success:function(result){
+                    console.log(result);
+                    alert(result);
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+
+    <!-- ACCEPT ALL SELECTED ACCOUNTS -->
+    <script>
+        function activate_selected_accounts(){
+            document.getElementById("selectionAction").value = "accept_selected_account";
+
+            $.ajax({
+                method:"POST",
+                url: "../../actions.php",
+                dataType: "text",
+                data: $("#pending_accounts").serialize(),
+                success:function(result){
+                    console.log(result);
+                    alert(result);
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
     
     <!-- SHOW DELETE OR ACCEPT BASED ON CHECKED BOX -->
     <script>
         const form = document.getElementById("pending_accounts");
 
         form.onchange = function(){
-            let checkboxes = document.getElementsByName("selectedAccount[]");
+            let checkboxes = document.getElementsByName("selectedAccount[]") ?? null;
             
-            const selectedAccounts = [];
-
-            checkboxes.forEach(item => {
-                if(item.checked)
+            if(checkboxes){
+                const selectedAccounts = [];
+                
+                checkboxes.forEach(item => {
+                    if(item.checked)
                     selectedAccounts.push(item.value);
-            })
-
-            if(selectedAccounts.length > 0)
+                })
+                
+                if(selectedAccounts.length > 0)
                 document.getElementById("action_wrapper").style.display = "inline";
-            else
-            document.getElementById("action_wrapper").style.display = "none";
+                else
+                document.getElementById("action_wrapper").style.display = "none";
+            }
         }
     </script>
+
+        
 
     <script>
 

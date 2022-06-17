@@ -163,7 +163,7 @@
         echo $id;
     }
 
-        //CREATE NEW USER IN SYSTEM
+    //CREATE NEW USER IN SYSTEM
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-createUser"){
         $sid = $_POST['sid'];
         $name = $_POST['name'];
@@ -238,6 +238,7 @@
         // echo $stm -> execute()
     }
 
+    //RETURN A BOOK
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "returnBook"){
         $borrow_id = $_POST['borrow_id'];
         $stm = $PDO -> prepare("UPDATE tbl_borrow SET status = 'Returned' WHERE borrow_id = $borrow_id");
@@ -258,8 +259,143 @@
         
     }
 
-    
+    // ACCEPT ALL SELECTED ACCOUNS
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "accept_selected_account"){
 
+        $selected_acccounts = $_POST['selectedAccount'];
+        
+        foreach($selected_acccounts as $i){
+            $id = $i;
+
+            $stm = $PDO -> prepare( "UPDATE tbl_pending_account SET isActivated = 1  WHERE id = $id" );
+            $stm ->execute();
+    
+            $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE id = $id" );
+            $stm ->execute();
+    
+            $res = $stm -> fetch(PDO::FETCH_ASSOC);
+            $name = $res['name'];
+            $sid = $res['sid'];
+            $email = $res['email'];
+            $account_type = $res['account_type'];
+            $password = $res['password'];
+    
+            if($account_type == "Student")
+                $table_name = "tbl_students (lrn, name , email)";
+            else if($account_type == "Personnel")
+                $table_name = "tbl_personnels ( employee_id, name , email)";
+    
+    
+            $stm = $PDO -> prepare( "INSERT INTO $table_name  VALUES (? , ? , ? ) ");
+            $stm -> bindValue( 1 , $sid);
+            $stm -> bindValue( 2 , $name);
+            $stm -> bindValue( 3 , $email);
+            $stm ->execute();
+    
+        }
+        echo "Account was succesfully activated";
+        
+    }
+
+    // REJECT ALL SELECTED ACCOUNTS    
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "reject_selected_accounts"){
+        $selected_acccounts = $_POST['selectedAccount'];
+        
+        foreach($selected_acccounts as $i){
+            $id = (int) $i;
+        
+            $stm = $PDO -> prepare( "DELETE FROM tbl_pending_account WHERE id = $id" );
+            $stm -> execute();
+        }
+        echo "Selected accounts was succesfully declined";
+    }
+
+    // BORROWING ACCOUNT SEARCH
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "borrowSearchAccount"){
+        $sid = $_POST['sid'];
+        $account_type = $_POST['accountType'];
+
+        if($account_type == "Student")
+            $table = "tbl_students WHERE lrn";
+        else
+            $table = "tbl_personnels WHERE employee_id";
+
+        $stm = $PDO -> prepare(" SELECT * FROM $table  = '$sid' ");
+        $stm -> execute();
+        if( $stm -> rowCount()){
+            $_SESSION['borrower_status'] = true;
+
+            $borrower = $stm -> fetch(PDO::FETCH_ASSOC);
+
+            if( $account_type == "Student" ){
+                echo '<p class = "text-white text-center bg-success" >Borrower Information  </p>';
+                echo "<p> <b> Name: </b> ". $borrower['name'] . "   </p> ";
+                echo "<p> <b> Grade and Section: </b>".  $borrower['grade_section'] . "   </p> ";
+                echo "<p> <b> Adviser: </b>".  $borrower['adviser'] . "   </p> ";
+            }
+            else {
+                echo '<p class = "text-white text-center bg-success" >Borrower Information  </p>';
+
+                echo "<p> <b> Name: </b> ". $borrower['name'] . "   </p> ";
+                echo "<p> <b> Job Description: </b>".  $borrower['designation'] . "   </p> ";
+            }
+        } else {
+            echo '<p class="text-danger"> Invalid account </p>';
+            $_SESSION['borrower_status'] = false;
+        }
+    }
+
+    
+   // BORROWING CATALOG SEARCH
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "findCatalog") {
+        $catalog_number =  $_POST['catalog_number'];
+
+        $stm = $PDO -> prepare(" SELECT * FROM tbl_items WHERE id = ?");
+        $stm -> bindValue( 1, $catalog_number);
+        $stm -> execute();
+
+        if ($stm -> rowCount()){
+            $item = $stm -> fetch(PDO::FETCH_ASSOC);
+
+            $reserved = $PDO -> prepare(" SELECT * FROM tbl_reservations WHERE reservation_id = $catalog_number AND status IN ('Pending','Approved') ");
+            $reserved -> execute();
+
+            if($item['available'] - $reserved -> rowCount()){
+                $status = '<pan class="badge bg-success">Available </span>';
+                $_SESSION['catalog_status'] = true;
+            }
+            else{
+                $_SESSION['catalog_status'] = false;
+                $status = '<pan class="badge bg-success">Not Available </span>';
+            }
+
+
+            echo '<p class = "text-white text-center bg-success" >Item Information  </p>';
+            echo "<p> <b> Tilte: </b> ". $item['title'] . "   </p> ";
+            echo "<p> <b> Year </b>".  $item['date'] . "   </p> ";
+            echo "<p> <b> Author/s: </b>".  $item['author'] . "   </p> ";
+            echo "<p> <b> Available: </b>".  $item['available'] . "   </p> ";
+            echo "<p> <b> Reserved: </b>".  $reserved -> rowCount() . "   </p> ";
+            echo "<p> <b> Status: </b>".  $status. "   </p> ";
+        }
+        else {
+            $_SESSION['catalog_status'] = false;
+            echo "<p class='text-danger'>Invalid catalog number</p>" ;
+        }
+    }
+
+
+
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "addBorrow") {
+        if($_SESSION['borrower_status'] &&  $_SESSION['catalog_status']){
+            echo "<script> window.location.assign('sda.php') </script>";
+            echo "Adas";
+        }
+        else {
+        }
+    }
+    
+    
     // ============ USER ACTIONS ============= //
     //SIGN UP
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "btn-signup"){
@@ -359,7 +495,7 @@
                                 <li><i class="fa-solid fa-calendar-day me-2"></i>Publication Year: ' .  $i['date'] . ' </li>
                                 <li><i class="fa-solid fa-signature me-2"></i>Genre: ' . $i['genre'] . ' </li>
                                 <li><i class="fa-solid fa-tag me-2"></i>Call Number: ' . $i['call_number'] . ' </li>
-                        
+                                <li><i class="fa-solid fa-hashtag me-2"></i>Catalog Number: '. $i['id'] .' </li>
                                 <li>
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
@@ -378,8 +514,8 @@
                                 </li>
                             </ul>
 
-                            <a class="btn btn-primary btn-mid mx-2 '; if($i['available'] == 0) echo "disabled"; echo '"  >Request</a>
-                            <a onclick="bookmark("'. $i['id'] . '")" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
+                            <a href="./reserve.php?book_id= '.$i['id'].'" class="btn btn-primary btn-mid mx-2 '; if($i['available'] == 0) echo "disabled"; echo '"  >Request</a>
+                            <a onclick="bookmark(`'. $i['id'] . '`)" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
                         </div>
                     </div>';
             }
@@ -421,39 +557,93 @@
         }
     }
 
+    // ============ EVENTS ACTIONS ============= //
 
-      // ============ EVENTS ACTIONS ============= //
-      //expiration of active reservations
+    // ADMIN
+    //expiration of active reservations
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_reservation_date" ){
         $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Approved' AND ADDDATE( reservation_date , INTERVAL 1 DAY) < CURRENT_TIMESTAMP" );
         $stm -> execute();
         
         $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
-
+        
         foreach($res as $i){
             $stm = $PDO -> prepare("UPDATE tbl_reservations SET status = 'Expired' WHERE reservation_id = ?");
             $stm -> bindValue(1 , $i['reservation_id']);
-                
+            
             echo $stm -> execute();
         }
-
+        
         echo "working";
         
     }
-
+    
     //borrowed overdue
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_reservation_date" ){
         $stm = $PDO -> prepare( "SELECT * FROM tbl_borrow WHERE status = 'Borrow' AND due_date < CURRENT_TIMESTAMP" );
         $stm -> execute();
         
         $res = $stm -> fetchAll(PDO::FETCH_ASSOC);
-
+        
         foreach($res as $i){
             $stm = $PDO -> prepare("UPDATE tbl_borrow SET status = 'Overdue' WHERE borrow_id = ?");
             $stm -> bindValue(1 , $i['borrow_id']);
-                
+            
             echo $stm -> execute();
         }
-
+        
         echo "overdue";
     }
+    
+    //check pending accounts
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_pending_account" ){
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_pending_account WHERE isActivated = 0" );
+        $stm -> execute();
+        $nPendingAccount = $stm->rowCount();
+        
+        if( $stm -> rowCount() > 0 )
+        echo ' <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        ' . $stm->rowCount() . '
+        </span>';
+    }
+    
+    
+    //check pending accounts
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "check_pending_reservations" ){
+        $stm = $PDO -> prepare( "SELECT * FROM tbl_reservations WHERE status = 'Pending'" );
+        $stm -> execute();
+        
+        if($stm->rowCount()){
+            echo ' <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            ' . $stm->rowCount() . '
+            </span>';
+        }
+    }
+
+    // USER
+
+    //count user reervation 
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user_reservation_notifcation_count" ){
+        $sid = $user['sid'];
+        $stm  = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND borrower_sid = $sid");
+        $stm -> execute();
+
+        if( $stm -> rowCount() )
+            echo '<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    '.$stm -> rowCount() .'    
+                  </span>';
+    }
+
+    //count user borrowed
+    if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user_borrow_notifcation_count" ){
+        $sid = $user['sid'];
+        $stm  = $PDO -> prepare("SELECT * FROM tbl_borrow WHERE status IN('Borrow', 'Overdue' ) AND borrower_sid = $sid");
+        $stm -> execute();
+
+        if( $stm -> rowCount() )
+            echo '<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    '.$stm -> rowCount() .'    
+                  </span>';
+    }
+
+
