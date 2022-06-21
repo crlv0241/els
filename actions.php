@@ -326,18 +326,30 @@
             $_SESSION['borrower_status'] = true;
 
             $borrower = $stm -> fetch(PDO::FETCH_ASSOC);
+            $borrowCount = $PDO -> prepare( "SELECT * FROM tbl_borrow WHERE borrower_sid = '$sid' AND status IN ('Overdue', 'Borrow')"  );
+            $borrowCount -> execute();
 
             if( $account_type == "Student" ){
                 echo '<p class = "text-white text-center bg-success" >Borrower Information  </p>';
                 echo "<p> <b> Name: </b> ". $borrower['name'] . "   </p> ";
                 echo "<p> <b> Grade and Section: </b>".  $borrower['grade_section'] . "   </p> ";
                 echo "<p> <b> Adviser: </b>".  $borrower['adviser'] . "   </p> ";
+                echo "<p> <b> Borrowed: </b>".  $borrowCount -> rowCount() . "   </> ";
+                
+                if($borrowCount -> rowCount() > 2){
+                    echo '<p class="text-danger" id="borrower_max_error"><i class="fa-solid fa-circle-exclamation"></i> Maximum number of borrowed item reached</p>';
+
+                }
             }
             else {
                 echo '<p class = "text-white text-center bg-success" >Borrower Information  </p>';
-
                 echo "<p> <b> Name: </b> ". $borrower['name'] . "   </p> ";
                 echo "<p> <b> Job Description: </b>".  $borrower['designation'] . "   </p> ";
+                echo "<p> <b> Borrowed: </b>".  $borrowCount -> rowCount() . "   </> ";
+                
+                if($borrowCount -> rowCount() > 3){
+                    echo '<p class="text-danger"><i class="fa-solid fa-circle-exclamation"></i> Maximum number of borrowed reached</p>';
+                }
             }
         } else {
             echo '<p class="text-danger"> Invalid account </p>';
@@ -345,8 +357,7 @@
         }
     }
 
-    
-   // BORROWING CATALOG SEARCH
+    // BORROWING CATALOG SEARCH
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "findCatalog") {
         $catalog_number =  $_POST['catalog_number'];
 
@@ -361,12 +372,12 @@
             $reserved -> execute();
 
             if($item['available'] - $reserved -> rowCount()){
-                $status = '<pan class="badge bg-success">Available </span>';
+                $status = '<span id="item_status"  class="badge bg-success">Available </span>';
                 $_SESSION['catalog_status'] = true;
             }
             else{
                 $_SESSION['catalog_status'] = false;
-                $status = '<pan class="badge bg-success">Not Available </span>';
+                $status = '<span id="item_status" class="badge bg-danger">Not Available </span>';
             }
 
 
@@ -376,23 +387,59 @@
             echo "<p> <b> Author/s: </b>".  $item['author'] . "   </p> ";
             echo "<p> <b> Available: </b>".  $item['available'] . "   </p> ";
             echo "<p> <b> Reserved: </b>".  $reserved -> rowCount() . "   </p> ";
-            echo "<p> <b> Status: </b>".  $status. "   </p> ";
+            echo '<p > <b> Status: </b>'.  $status. '   </p> ';
         }
         else {
             $_SESSION['catalog_status'] = false;
             echo "<p class='text-danger'>Invalid catalog number</p>" ;
         }
+    
     }
 
 
-
+    //add new borrow
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "addBorrow") {
-        if($_SESSION['borrower_status'] &&  $_SESSION['catalog_status']){
-            echo "<script> window.location.assign('sda.php') </script>";
-            echo "Adas";
+        $borrower_sid = $_POST['sid'];
+        $book_id = $_POST['catalog_number'];
+
+        $haveActiveBorrow = $PDO -> prepare(" SELECT * FROM tbl_borrow WHERE borrower_sid = '$borrower_sid' AND book_id = '$book_id' AND status = 'Borrow'");
+        $haveActiveBorrow -> execute();
+
+        if( $haveActiveBorrow -> rowCount() ){
+            echo '<p class="p-1 my-1 text-white bg-danger text-center"> Borrower have an existing acquisition of the item.</p>';
+            exit;
         }
-        else {
-        }
+
+        $days = $_POST['days'];
+        $borrow_date = new DateTime();
+        $borrow_date = $borrow_date -> format("Y-m-d H:i:s");
+        
+        $due_date_object = new DateTime($borrow_date);
+        $due_date_object -> add( new DateInterval("P".$days."D"));
+
+        $due_date = $due_date_object -> format("Y-m-d H:i:s");
+        $accession_id = $_POST['accession_id'];
+        
+        $stm = $PDO -> prepare("INSERT INTO tbl_borrow 
+                                    (borrower_sid , book_id , days , borrow_date , due_date , accession_id , status)
+                                VALUES ( ? , ? , ? ,? , ? , ? , ?) ");
+        $stm -> bindValue( 1 , $borrower_sid );
+        $stm -> bindValue( 2 , $book_id );
+        $stm -> bindValue( 3 , $days );
+        $stm -> bindValue( 4 , $borrow_date );
+        $stm -> bindValue( 5 , $due_date );
+        $stm -> bindValue( 6 , $accession_id );
+        $stm -> bindValue( 7 , "Borrow" );      
+
+        $stm -> execute();
+
+        //update available
+        $stm = $PDO -> prepare("UPDATE tbl_items SET available = available - 1 WHERE id= $book_id");
+        $stm -> execute();
+
+        echo '1';
+
+
     }
     
     
