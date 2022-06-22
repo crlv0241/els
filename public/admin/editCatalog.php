@@ -35,6 +35,21 @@
         $img           = $_POST['img'] ?? null;
         $call_number           = $_POST['call_number'] ?? null;
 
+        $prev_quantity = $PDO -> prepare("SELECT * FROM tbl_items WHERE id = $id");
+        $prev_quantity -> execute();
+
+        $catalog = $prev_quantity -> fetch(PDO::FETCH_ASSOC);
+
+        //add available 
+        if($catalog['quantity'] != $quantity)
+            {
+                $borrowed = $catalog['quantity'] - $catalog['available'];
+                $update = $PDO->prepare("UPDATE tbl_items 
+                                    SET available = $quantity - $borrowed
+                                    WHERE id = $id");
+                $update -> execute(); 
+            }
+
         $temp = [];
         for($i = 1; $i <= $authorCount; $i++)
         {   
