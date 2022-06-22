@@ -2,6 +2,7 @@
     require_once "./db/connecttion.php";
     session_start();
     $user  = $_SESSION['user'] ?? null;
+    date_default_timezone_set('Asia/Manila');
 
 
     // =======  ADMIN ACTIONS ==========//
@@ -399,6 +400,7 @@
 
     //add new borrow
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "addBorrow") {
+       
         $borrower_sid = $_POST['sid'];
         $book_id = $_POST['catalog_number'];
 

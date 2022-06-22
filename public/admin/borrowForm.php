@@ -2,7 +2,7 @@
 
     require_once "../../db/connecttion.php";
     session_start();
-
+    date_default_timezone_set('Asia/Manila');
     // $client = $_SESSION['client'] ?? null;
 
     // if ( !isset($client) )
