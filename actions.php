@@ -382,7 +382,7 @@
 
 
             echo '<p class = "text-white text-center bg-success" >Item Information  </p>';
-            echo "<p> <b> Tilte: </b> ". $item['title'] . "   </p> ";
+            echo "<p> <b> Title: </b> ". $item['title'] . "   </p> ";
             echo "<p> <b> Year </b>".  $item['date'] . "   </p> ";
             echo "<p> <b> Author/s: </b>".  $item['author'] . "   </p> ";
             echo "<p> <b> Available: </b>".  $item['available'] . "   </p> ";
