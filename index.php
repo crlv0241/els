@@ -4,6 +4,8 @@
 <title>General Mariano Alvarez Technical High School </title>
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
@@ -12,12 +14,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="w3.css">	
 <style>
-	
+        
         body {margin:0;font-family:Arial;padding: 0;}
 
         .topnav {
         overflow: hidden;
-        background-color: #9b3437;
+        background-color: #5a2022;
         }
 
         .topnav a {
@@ -74,8 +76,8 @@
         }
 
         .topnav a:hover, .dropdown:hover .dropbtn {
-        background-color: #ffde00;
         color: white;
+        opacity: .8;
         }
 
         .dropdown-content a:hover {
@@ -276,20 +278,20 @@
             
             
         .accordion {
-        background-color: #ffde00;
-        color: #444;
-        cursor: pointer;
-        padding: 18px;
-        width: 99%;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 17px;
-        transition: 0.4s;
+          background-color: #9b3437 ;
+          color: white;
+          cursor: pointer;
+          padding: 18px;
+          width: 99%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 17px;
+          transition: 0.4s;
         }
 
         .active, .accordion:hover {
-        background-color: #ffde00;
+          opacity: .8;
         }
 
         .panel {
@@ -348,7 +350,7 @@
 	<div class="yDiv"></div>
         <div class="topnav" id="myTopnav">
         <div>
-            <a href="#"><font color="white">Home</font></a>
+            <a href="./public/user/index.php"><font color="white">Sign In</font></a>
         </div>
 
 	</div>
@@ -393,7 +395,7 @@
 			<button class="accordion">New Acquisition</button>
 				<div class="panel">
   					<p>
-                          Enter information about New Acquisition here
+                          New Acquisition will be posted here.
                       </p>
 				</div>
 			<hr>
@@ -402,7 +404,7 @@
 			<button class="accordion">Online Services</button>
 				<div class="panel">
                     <p>
-                        Enter information about Online Services here
+                        The following are the online services.
                     </p>
                 </div>
 		</div>
@@ -428,11 +430,30 @@
   					
   				<h2><font color="#012775">Mission</font></h2>
 		    <p align="justify">
-                Enter Mission content here
+        GMATHS is committed:
+      <ul>
+          <li>
+            To provide equitable and relevant educational opportunities in the area of Technical
+            and Vocational Education and to produce a demand-driven technology individuals,
+            quality technicians and skilled workers for today's career and tomorrow's
+            opportunity.
+          </li>
+          <li>
+            Shall lead and undertake researches and extension services in the community to have progressive life towards nation-building.
+          </li>
+          <li>
+              Sustain GMATHS family morale and productivity by developing their full potential
+              and total well-being and by establishing mutual trust, mutual responsibility and
+              harmony through open communication.
+          </li>
+      </ul>
+
 			  	</p>
 			  <h2><font color="#012775">Vision</font></h2>
 				 <p align="justify">
-                     Enter Vision content here		
+         General Mariano Alvarez Technical High School shall be the leading "DepEd" institution in
+
+the area of Technical and Vocational Education in the 21 st century and beyond.		
 			  	</p>
 		  </div>
 	
@@ -474,6 +495,7 @@
 		  </div>
 		</div>
 	</div>
+    </div>
 			
 		
 <script>
@@ -498,35 +520,32 @@ for (i = 0; i < acc.length; i++) {
 
 <div class="yDiv"></div>	
 	
-
-<div class="w3-row-padding w3-green">
-  <div class="w3-third">
-    <h2>Our Business Office</h2>
-    <p>Office Location</p>
-    <p>Contact No.</p>
-  </div>
-
-  <div class="w3-third">
-    <h2>Email</h2>
-    <p>
-        Email Addresses
-	</p> 
-  </div>
-
-  <div class="w3-third">
-    <h2>Business Hours</h2>
-    <p>Weekdays : 8:00 AM to 5:00 PM <br>
- 		Saturday : 8:00 AM to 5:00 PM <br>
-		Sunday : CLOSED</p>
-  </div>
-</div>
-<div class="pfooter fDiv">
-  <p><br><strong><font size="3">General Mariano Alvarez Technical High School</font></strong><br>
-    School Address<br>
-	<a href="#" class="alink"> Privacy Policy </a><br>
-	  Copyright 2021
-
-</p></div>
+ <!-- FONT AWESOME -->
+<script src="https://kit.fontawesome.com/60d9c0509e.js" crossorigin="anonymous"></script>
+<footer class="footer" style="background-color: #5a2022; color:white;padding:2rem">
+        <div class="">
+            <div class="row">
+                <div class="col-md-5">
+                    <h4 > Address </h4>
+                    <ul>
+                        <li> General Mariano Alvarez Technical High School</li>
+                        <li> Congressional Road, 4117 General Mariano Alvarez</li>
+                        <li> 	Telephone: (046) 972-1148 </li>
+                        <li> gmathslibrary@gmail.com </li>
+                    </ul>
+                </div>
+                <!-- <div class="col-md-5">
+                    <h4>Follow Us On : </h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+  </footer>
 
 </body>
 </html>
