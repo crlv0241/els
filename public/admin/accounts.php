@@ -266,7 +266,7 @@
                 responsive:true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder:"Search a account ...",
+                    searchPlaceholder:"Search account ...",
                 }
             });
             
