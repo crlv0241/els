@@ -674,7 +674,8 @@
     //count user reervation 
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user_reservation_notifcation_count" ){
         $sid = $user['sid'];
-        $stm  = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND borrower_sid = $sid");
+        $stm  = $PDO -> prepare("SELECT * FROM tbl_reservations WHERE status = 'Approved' AND borrower_sid = ?");
+        $stm -> bindValue( 1, $sid);
         $stm -> execute();
 
         if( $stm -> rowCount() )
@@ -686,7 +687,8 @@
     //count user borrowed
     if($_SERVER['REQUEST_METHOD'] == "POST" && $_POST['action'] == "user_borrow_notifcation_count" ){
         $sid = $user['sid'];
-        $stm  = $PDO -> prepare("SELECT * FROM tbl_borrow WHERE status IN('Borrow', 'Overdue' ) AND borrower_sid = $sid");
+        $stm  = $PDO -> prepare("SELECT * FROM tbl_borrow WHERE status IN('Borrow', 'Overdue' ) AND borrower_sid = ?");
+        $stm -> bindValue( 1 , $sid);
         $stm -> execute();
 
         if( $stm -> rowCount() )

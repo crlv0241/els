@@ -16,7 +16,8 @@
         $borrower_sid = $_GET['borrower_sid'];
         $reservation_id = $_GET['reservation_id'] ?? null;
 
-        $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE sid = $borrower_sid");
+        $stm = $PDO -> prepare("SELECT * FROM tbl_pending_account WHERE sid = ?");
+        $stm -> bindValue( 1, $borrower_sid);
         $stm -> execute();
 
         $borrowerAccount = $stm -> fetch(PDO::FETCH_ASSOC);
@@ -28,11 +29,13 @@
         else 
             $table = "tbl_personnels WHERE employee_id";
 
-        $stm = $PDO -> prepare("SELECT * FROM $table =  $borrower_sid");
+        $stm = $PDO -> prepare("SELECT * FROM $table =  ?");
+        $stm -> bindValue( 1, $borrower_sid);
         $stm -> execute();
         $borrower = $stm -> fetch(PDO::FETCH_ASSOC);
 
-        $stm = $PDO -> prepare("SELECT * FROM tbl_items WHERE id = $book_id");
+        $stm = $PDO -> prepare("SELECT * FROM tbl_items WHERE id = ?");
+        $stm -> bindValue( 1 , $book_id);
         $stm -> execute();
         $item = $stm -> fetch(PDO::FETCH_ASSOC);
         

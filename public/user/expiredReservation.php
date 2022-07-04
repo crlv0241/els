@@ -20,7 +20,9 @@
         $table = "tbl_personnels";
     }
 
-    $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = $sid" );
+    $stm = $PDO -> prepare( "SELECT * FROM $table WHERE $col = ?" );
+    $stm -> bindValue( 1 , $sid);
+
     $stm -> execute();
 
     $user = $stm -> fetch(PDO::FETCH_ASSOC);
