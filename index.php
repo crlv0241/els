@@ -351,6 +351,7 @@
         <div class="topnav" id="myTopnav">
         <div>
             <a href="./public/user/index.php"><font color="white">Sign In</font></a>
+            <a target="_new" href="https://docs.google.com/forms/d/e/1FAIpQLSerfFbKFK4rQx51W8LolOHLn-21HINlT8j-QigGOXd67tx38A/viewform?usp=sf_link><font color="white">Appointment</font></a>
         </div>
 
 	</div>

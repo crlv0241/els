@@ -57,7 +57,7 @@
         }
 
         .login-logo-wrapper img {
-            min-width: 50%;
+            width: 70%;
         }
 
         .row,

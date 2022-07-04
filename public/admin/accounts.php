@@ -102,9 +102,10 @@
                     <table id="employee_data" class="mt-3 border table  table-hover employee_data" >
 					<thead >
 						<tr>
-						<th  class="border" scope="col">LRN</th>
-						<th  class="border" scope="col">Full Name</th>
-						<th  class="border" scope="col">Email</th>
+                            <th  class="border" scope="col">LRN</th>
+                            <th  class="border" scope="col">Full Name</th>
+                            <th  class="border" scope="col">Email</th>
+                            <th  class="border" scope="col">Account Type</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -119,6 +120,7 @@
                             <td   class="border"><?php echo $row['sid'] ?></td>
                             <td   class="border"><?php echo $row['name'] ?></td>
                             <td   class="border"><?php echo $row['email'] ?></td>
+                            <td   class="border"><?php echo $row['account_type'] ?></td>
                         </tr>
                     <?php endwhile; ?>
 					</tbody>

@@ -413,7 +413,7 @@
                                     </li>
                                 </ul>
 
-                                <a href="./reserve.php?book_id=<?php echo $i['id']?>" class="btn btn-primary btn-mid mx-2 <?php if($i['available'] == 0) echo "disabled"; ?>"  >Request</a>
+                                <a href="./reserve.php?book_id=<?php echo $i['id']?>" class="btn btn-primary btn-mid mx-2 <?php if($i['available'] <= 0) echo "disabled"; ?>"  >Request</a>
                                 <a onclick="bookmark('<?php echo $i['id'] ?>')" class="btn btn-primary btn-mid "  ><i class="fa-solid fa-bookmark me-1"></i>Add to Bookmark</a>
                             </div>
                         </div>

@@ -194,7 +194,8 @@
                             <input type="datetime" class="form-control" readonly value="<?php $date = new DateTime();  echo $date -> format("M d Y H:i:s"); ?>">
                             <input required type="text" name="accession_id" placeholder="Enter accession number..." class="form-control mt-2">
                             <div class="col-md-2">
-                                <input type="number" min="1" max="3" name="days" required class="form-control mt-2" placeholder="Enter days"> 
+                                <input type="text"  class="form-control mt-2" value="3 Days" readonly>
+                                <input type="hidden" min="1" max="3" name="days" required class="form-control mt-2" placeholder="Enter days" value="3" r> 
                             </div>
 
                             <input type="hidden" name="borrow_date" class="form-control mt-2"   value="<?php $date = new DateTime(); echo $date -> format("Y-m-d H:i:s"); ?>">
